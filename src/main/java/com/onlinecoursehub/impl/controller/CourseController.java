@@ -1,6 +1,7 @@
 package com.onlinecoursehub.impl.controller;
 
 import com.onlinecoursehub.impl.model.Course;
+import com.onlinecoursehub.impl.model.Student;
 import com.onlinecoursehub.impl.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,5 +33,25 @@ public class CourseController {
         @GetMapping("/name/{name}")
         public ResponseEntity<Course> ShowById(@PathVariable String name){
             return new ResponseEntity<>(courseService.showByName(name).get(),HttpStatus.CREATED);
+        }
+        @PatchMapping("/update/{id}")
+        public ResponseEntity<String> updateCourse(@PathVariable long id,@RequestBody Course c){
+            return ResponseEntity.ok(courseService.updateCourse(id,c));
+        }
+        @DeleteMapping("/delete/id/{id}")
+        public ResponseEntity<String> deleteCourseById(@PathVariable long id){
+            return ResponseEntity.ok(courseService.deleteCourseById(id));
+        }
+        @DeleteMapping("/delete/title/{title}")
+        public ResponseEntity<String> deleteCourseByName(@PathVariable String name){
+            return ResponseEntity.ok(courseService.deleteCourseByTitle(name));
+        }
+        @GetMapping("/capacity/id/{id}")
+        public ResponseEntity<String> getCourseCapacityById(@PathVariable long id) {
+            return ResponseEntity.ok(courseService.getCourseCapacityById(id));
+        }
+        @GetMapping("/capacity/name/{name}")
+        public ResponseEntity<String> getCourseCapacityByName(@PathVariable String name) {
+            return ResponseEntity.ok(courseService.getCourseCapacityByName(name));
         }
 }

@@ -1,10 +1,7 @@
 package com.onlinecoursehub.impl.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,9 +11,12 @@ import java.util.Set;
 @Entity
 @Data
 @Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Course {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="course_id")
@@ -47,4 +47,6 @@ public class Course {
             inverseJoinColumns = @JoinColumn(name = "prerequisite_course_id")
     )
     private Set<Course> prerequisites=new HashSet<>();
+
+
 }
