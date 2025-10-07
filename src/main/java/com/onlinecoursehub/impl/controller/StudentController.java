@@ -1,6 +1,7 @@
 package com.onlinecoursehub.impl.controller;
 
 import com.onlinecoursehub.impl.dto.StudentDto;
+import com.onlinecoursehub.impl.model.Enrollment;
 import com.onlinecoursehub.impl.model.Student;
 import com.onlinecoursehub.impl.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,9 @@ public class StudentController {
     StudentService studentService;
 
     @PostMapping("/enroll")
-    public ResponseEntity addStudent(@RequestBody Student student){
+    public ResponseEntity<Object> addStudent(@RequestBody Student student){
         if (studentService.addStudent(student)!=null)
-        return ResponseEntity.ok("Student Added Successfully");
+        return ResponseEntity.ok(new StudentDto(student.getName(),student.getEmail(),student.getEnrollments().stream().map(Enrollment::getId).toList()));
 
         return ResponseEntity.badRequest().body("Email Already Exists");
     }
