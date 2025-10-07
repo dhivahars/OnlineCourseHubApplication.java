@@ -17,8 +17,11 @@ public class StudentController {
     StudentService studentService;
 
     @PostMapping("/enroll")
-    public ResponseEntity<StudentDto> addStudent(@RequestBody Student student){
-        return ResponseEntity.ok(studentService.addStudent(student));
+    public ResponseEntity addStudent(@RequestBody Student student){
+        if (studentService.addStudent(student)!=null)
+        return ResponseEntity.ok("Student Added Successfully");
+
+        return ResponseEntity.badRequest().body("Email Already Exists");
     }
     @GetMapping("/enrolled")
     public ResponseEntity<List<StudentDto>> studentsList(){
