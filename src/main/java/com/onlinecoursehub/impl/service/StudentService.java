@@ -1,5 +1,7 @@
 package com.onlinecoursehub.impl.service;
 
+import com.onlinecoursehub.impl.dto.StudentDto;
+import com.onlinecoursehub.impl.model.Enrollment;
 import com.onlinecoursehub.impl.model.Student;
 import com.onlinecoursehub.impl.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +14,13 @@ import java.util.Optional;
 public class StudentService {
     @Autowired
     StudentRepository studentRepository;
-    public Student addStudent(Student s) {
-       return studentRepository.save(s);
+    public StudentDto addStudent(Student s) {
+       studentRepository.save(s);
+       return entityToDto(s);
     }
 
-    public List<Student> getStudentsList() {
-        return studentRepository.findAll();
+    public List<StudentDto> getStudentsList() {
+        return studentRepository.findAll().stream().map(StudentService::entityToDto).toList();
     }
 
     public Optional<Student> getStudentById(long id) {
@@ -28,8 +31,8 @@ public class StudentService {
         return Optional.ofNullable(Optional.ofNullable(studentRepository.findByName(name)).orElseThrow(() -> new RuntimeException("Student with name \""+ name +"\" doesn't exist ")));
     }
 
-    public String updateStudent(Student s) {
-        Student existing = studentRepository.findById(s.getId())
+    public String updateStudent(long id,Student s) {
+        Student existing = studentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found with id " + s.getId()));
 
         if(s.getName() != null)
@@ -41,12 +44,21 @@ public class StudentService {
         return "Student updated successfully";
     }
 
-
     public String deleteStudentById(long id) {
-        if(studentRepository.getReferenceById(id).getId()==id){
+        if(studentRepository.existsById(id)){
         studentRepository.deleteById(id);
         return "Student Deleted Successfully";}
 
         return "Student Not Found";
+    }
+    public String deleteStudentByName(String name) {
+        if(studentRepository.findByName(name).getName().equalsIgnoreCase(name)){
+            studentRepository.deleteByName(name);
+            return "Student Deleted Successfully";}
+
+        return "Student Not Found";
+    }
+    public static StudentDto entityToDto(Student student){
+        return new StudentDto(student.getName(),student.getEmail(),student.getEnrollments().stream().map(Enrollment::getId).toList());
     }
 }
