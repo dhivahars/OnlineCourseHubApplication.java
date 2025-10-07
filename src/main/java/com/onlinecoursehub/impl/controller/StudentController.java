@@ -1,14 +1,14 @@
 package com.onlinecoursehub.impl.controller;
 
+import com.onlinecoursehub.impl.dto.StudentDto;
 import com.onlinecoursehub.impl.model.Student;
 import com.onlinecoursehub.impl.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/student")
@@ -17,30 +17,31 @@ public class StudentController {
     StudentService studentService;
 
     @PostMapping("/enroll")
-    public ResponseEntity<Student> addStudent(@RequestBody Student student){
-        return new ResponseEntity<>(studentService.addStudent(student), HttpStatus.CREATED);
+    public ResponseEntity<StudentDto> addStudent(@RequestBody Student student){
+        return ResponseEntity.ok(studentService.addStudent(student));
     }
-
-    @GetMapping("s/enrolled")
-    public ResponseEntity<List<Student>> studentsList(){
-        return new ResponseEntity<>(studentService.getStudentsList(),HttpStatus.OK);
+    @GetMapping("/enrolled")
+    public ResponseEntity<List<StudentDto>> studentsList(){
+        return ResponseEntity.ok(studentService.getStudentsList());
     }
-
     @GetMapping("/id/{id}")
-    public Student getStudentById(@PathVariable long id){
-        return studentService.getStudentById(id).get();
+    public ResponseEntity<StudentDto> getStudentById(@PathVariable long id){
+        return ResponseEntity.ok(studentService.entityToDto(studentService.getStudentById(id).get()));
     }
     @GetMapping("name/{name}")
-    public Student getStudentByName(@PathVariable String name){
-        return studentService.getStudentByName(name).get();
+    public ResponseEntity<StudentDto> getStudentByName(@PathVariable String name){
+        return ResponseEntity.ok(studentService.entityToDto(studentService.getStudentByName(name).get()));
     }
-
-    @PatchMapping("/update")
-    public ResponseEntity<String> updateStudent(@RequestBody Student s){
-        return new ResponseEntity<>(studentService.updateStudent(s),HttpStatus.OK);
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<String> updateStudent(@PathVariable long id,@RequestBody Student s){
+        return ResponseEntity.ok(studentService.updateStudent(id,s));
     }
-    @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteStudent(@RequestParam int id){
-        return new ResponseEntity<>(studentService.deleteStudentById(id),HttpStatus.OK);
+    @DeleteMapping("/delete/id/{id}")
+    public ResponseEntity<String> deleteStudentById(@PathVariable long id){
+        return ResponseEntity.ok(studentService.deleteStudentById(id));
+    }
+    @DeleteMapping("/delete/name/{name}")
+    public ResponseEntity<String> deleteStudentByName(@PathVariable String name){
+        return ResponseEntity.ok(studentService.deleteStudentByName(name));
     }
 }
