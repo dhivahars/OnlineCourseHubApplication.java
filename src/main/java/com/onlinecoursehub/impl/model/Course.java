@@ -1,6 +1,9 @@
 package com.onlinecoursehub.impl.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -8,6 +11,9 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +38,7 @@ public class Course {
     private List<Enrollment> enrollments=new ArrayList<>();
 
 
-    @ManyToMany(mappedBy = "prerequisites")
+    @ManyToMany
     @JoinTable(
             name = "course_prerequisite",
             joinColumns = @JoinColumn(name = "course_id"),
