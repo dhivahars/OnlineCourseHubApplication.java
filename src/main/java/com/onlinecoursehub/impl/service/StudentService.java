@@ -14,7 +14,10 @@ import java.util.Optional;
 public class StudentService {
     @Autowired
     StudentRepository studentRepository;
-    public StudentDto addStudent(Student s) {
+    public StudentDto addStudent(Student s){
+        if(studentRepository.existsByEmail(s.getEmail()))
+            return null;
+
        studentRepository.save(s);
        return entityToDto(s);
     }
