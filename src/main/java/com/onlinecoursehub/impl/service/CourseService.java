@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @Service
 public class CourseService {
+    @Autowired
     CourseRepository courseRepository;
     public Course addCourse(Course course) {
         return  courseRepository.save(course);
@@ -68,8 +69,6 @@ public class CourseService {
                 ", Enrolled: " + course.getEnrollments().size() +
                 ", Available: " + availableSeats;
     }
-
-
 
     public String getCourseCapacityByName(String name) {
         Course course = courseRepository.findByTitle(name);

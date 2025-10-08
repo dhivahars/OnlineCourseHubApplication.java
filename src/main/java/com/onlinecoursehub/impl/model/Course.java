@@ -31,10 +31,10 @@ public class Course {
     @Column(name="capacity",nullable = false)
     private int capacity;
 
-    @ManyToOne
-    @JoinColumn(name = "mentor_id",nullable = false)
-    private Mentor mentor;
 
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "mentor_id", nullable = false)
+    private Mentor mentor;
 
     @OneToMany(mappedBy = "course",cascade = CascadeType.ALL)
     private List<Enrollment> enrollments=new ArrayList<>();
