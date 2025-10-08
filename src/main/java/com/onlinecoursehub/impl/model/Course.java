@@ -45,6 +45,4 @@ public class Course {
             inverseJoinColumns = @JoinColumn(name = "prerequisite_course_id")
     )
     private Set<Course> prerequisites=new HashSet<>();
-
-
 }

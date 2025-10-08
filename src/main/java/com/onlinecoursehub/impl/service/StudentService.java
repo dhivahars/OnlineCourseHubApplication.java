@@ -36,15 +36,15 @@ public class StudentService {
     }
 
     public String updateStudent(long id,Student s) {
-        Student existing = studentRepository.findById(id)
+        Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found with id " + s.getId()));
 
         if(s.getName() != null)
-            existing.setName(s.getName());
+            student.setName(s.getName());
         if(s.getEmail() != null)
-            existing.setEmail(s.getEmail());
+            student.setEmail(s.getEmail());
 
-        studentRepository.save(existing);
+        studentRepository.save(student);
         return "Student updated successfully";
     }
 
