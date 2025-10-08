@@ -15,10 +15,12 @@ public class MentorService {
     @Autowired
     MentorRepository mentorRepository;
 
-    public Mentor addMentor(Mentor mentor) {
-        return mentorRepository.save(mentor);
+    public String addMentor(Mentor mentor) {
+        if(mentorRepository.existsByEmail(mentor.getEmail()))
+            return "Mentor already Present";
+        mentorRepository.save(mentor);
+        return "Mentor added successfully";
     }
-
     public List<Mentor> listMentor() {
         return mentorRepository.findAll();
     }

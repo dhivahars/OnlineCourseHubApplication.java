@@ -1,5 +1,6 @@
 package com.onlinecoursehub.impl.controller;
 
+import com.onlinecoursehub.impl.dto.CourseDto;
 import com.onlinecoursehub.impl.model.Course;
 import com.onlinecoursehub.impl.model.Student;
 import com.onlinecoursehub.impl.service.CourseService;
@@ -18,21 +19,21 @@ public class CourseController {
 
         //Create courses
         @PostMapping("/create")
-        public ResponseEntity<Course> createCourse(@RequestBody Course course){
+        public ResponseEntity<CourseDto> createCourse(@RequestBody Course course){
             return new ResponseEntity<>(courseService.addCourse(course), HttpStatus.CREATED);
         }
 
         @GetMapping("/list")
         public ResponseEntity<List<Course>> showCourse(){
-            return new ResponseEntity<>(courseService.listCourse(),HttpStatus.CREATED);
+            return new ResponseEntity<>(courseService.listCourse(),HttpStatus.FOUND);
         }
         @GetMapping("/id/{id}")
-        public ResponseEntity<Course> ShowById(@PathVariable long id){
-            return new ResponseEntity<>(courseService.showById(id).get(),HttpStatus.CREATED);
+        public ResponseEntity<CourseDto> ShowById(@PathVariable long id){
+            return new ResponseEntity<>(courseService.showById(id).get(),HttpStatus.FOUND);
         }
         @GetMapping("/name/{name}")
-        public ResponseEntity<Course> ShowById(@PathVariable String name){
-            return new ResponseEntity<>(courseService.showByName(name).get(),HttpStatus.CREATED);
+        public ResponseEntity<CourseDto> ShowById(@PathVariable String name){
+            return new ResponseEntity<>(courseService.showByName(name).get(),HttpStatus.FOUND);
         }
         @PatchMapping("/update/{id}")
         public ResponseEntity<String> updateCourse(@PathVariable long id,@RequestBody Course c){
