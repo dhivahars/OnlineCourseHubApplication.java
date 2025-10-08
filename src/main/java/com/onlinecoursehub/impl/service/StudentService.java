@@ -1,5 +1,6 @@
 package com.onlinecoursehub.impl.service;
 
+import com.onlinecoursehub.impl.dto.EnrollmentDto;
 import com.onlinecoursehub.impl.dto.StudentDto;
 import com.onlinecoursehub.impl.model.Enrollment;
 import com.onlinecoursehub.impl.model.Student;
@@ -55,13 +56,16 @@ public class StudentService {
         return "Student Not Found";
     }
     public String deleteStudentByName(String name) {
-        if(studentRepository.findByName(name).getName().equalsIgnoreCase(name)){
+        if(studentRepository.existsByName(name))
+        {
             studentRepository.deleteByName(name);
-            return "Student Deleted Successfully";}
+            return "Student Deleted Successfully";
+        }
 
         return "Student Not Found";
     }
     public static StudentDto entityToDto(Student student){
         return new StudentDto(student.getName(),student.getEmail(),student.getEnrollments().stream().map(Enrollment::getId).toList());
     }
+
 }

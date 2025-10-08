@@ -19,8 +19,8 @@ public class StudentController {
 
     @PostMapping("/enroll")
     public ResponseEntity<Object> addStudent(@RequestBody Student student){
-        if (studentService.addStudent(student)!=null)
-        return ResponseEntity.ok(new StudentDto(student.getName(),student.getEmail(),student.getEnrollments().stream().map(Enrollment::getId).toList()));
+        if (studentService.addStudent(student)!=null){
+        return ResponseEntity.ok(new StudentDto(student.getName(),student.getEmail(),student.getEnrollments().stream().map(Enrollment::getId).toList()));}
 
         return ResponseEntity.badRequest().body("Email Already Exists");
     }
