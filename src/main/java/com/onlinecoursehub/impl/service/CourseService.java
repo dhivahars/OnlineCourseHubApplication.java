@@ -70,8 +70,6 @@ public class CourseService {
                 ", Available: " + availableSeats;
     }
 
-
-
     public String getCourseCapacityByName(String name) {
         Course course = courseRepository.findByTitle(name);
         if (course == null) {
