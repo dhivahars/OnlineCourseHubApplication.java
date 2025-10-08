@@ -1,7 +1,9 @@
 package com.onlinecoursehub.impl.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.action.internal.OrphanRemovalAction;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,7 +32,7 @@ public class Course {
     private int capacity;
 
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "mentor_id", nullable = false)
     private Mentor mentor;
 
@@ -44,5 +46,6 @@ public class Course {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "prerequisite_course_id")
     )
+    @JsonIgnore
     private Set<Course> prerequisites=new HashSet<>();
 }
