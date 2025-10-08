@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @Service
 public class CourseService {
+    @Autowired
     CourseRepository courseRepository;
     public Course addCourse(Course course) {
         return  courseRepository.save(course);
