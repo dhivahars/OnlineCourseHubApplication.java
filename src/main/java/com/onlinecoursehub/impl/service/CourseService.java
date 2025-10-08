@@ -28,7 +28,7 @@ public class CourseService {
     }
 
     public Optional<Course> showByName(String name) {
-        return Optional.ofNullable(Optional.ofNullable(courseRepository.findByName(name))
+        return Optional.ofNullable(Optional.ofNullable(courseRepository.findByTitle(name))
                 .orElseThrow(() -> new RuntimeException("Course not found With Id:" + name)));
     }
 
