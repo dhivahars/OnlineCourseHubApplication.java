@@ -1,5 +1,6 @@
 package com.onlinecoursehub.impl.controller;
 
+import com.onlinecoursehub.impl.dto.EnrollmentDto;
 import com.onlinecoursehub.impl.dto.StudentDto;
 import com.onlinecoursehub.impl.model.Enrollment;
 import com.onlinecoursehub.impl.model.Student;
@@ -32,7 +33,7 @@ public class StudentController {
 
     @GetMapping("/id/{id}")
     public ResponseEntity<StudentDto> getStudentById(@PathVariable long id) {
-        return ResponseEntity.ok(studentService.entityToDto(studentService.getStudentById(id).get()));
+        return ResponseEntity.ok(StudentService.entityToDto(studentService.getStudentById(id).get()));
     }
 
     @GetMapping("name/{name}")

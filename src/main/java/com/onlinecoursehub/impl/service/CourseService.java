@@ -26,17 +26,18 @@ public class CourseService {
     MentorRepository mentorRepository;
 
     public CourseDto addCourse(Course course){
-        Set<Course> prerequisites = new HashSet<>();
-        Course inputCourse = courseRepository.save(course);
-
-        if (prerequisites != null && !prerequisites.isEmpty()) {
-            Set<Course> addingPrequisites = prerequisites.stream()
-                    .map(c -> courseRepository.findById(c.getId()).get())
-                    .collect(Collectors.toSet());
-            inputCourse.setPrerequisites(addingPrequisites);
-        }
-
-        return entityToDto(courseRepository.save(inputCourse));
+       return entityToDto(courseRepository.save(course));
+//        Set<Course> prerequisites = new HashSet<>();
+//        Course inputCourse = courseRepository.save(course);
+//
+//        if (prerequisites != null && !prerequisites.isEmpty()) {
+//            Set<Course> addingPrequisites = prerequisites.stream()
+//                    .map(c -> courseRepository.findById(c.getId()).get())
+//                    .collect(Collectors.toSet());
+//            inputCourse.setPrerequisites(addingPrequisites);
+//        }
+//
+//        return entityToDto(courseRepository.save(inputCourse));
     }
 
 
@@ -113,16 +114,16 @@ public class CourseService {
                 .orElseThrow(() -> new RuntimeException("Mentor not found with ID: " + mentorId));
 
         course.setMentor(mentor);
-        return courseRepository.save(course);
+        return courseRepository.save(course);}
 
-    public CourseDto entityToDto(Course course){
+     public CourseDto entityToDto(Course course){
         CourseDto courseDto=new CourseDto();
         courseDto.setTitle(course.getTitle());
         courseDto.setDescription(course.getDescription());
         courseDto.setCapacity(course.getCapacity());
         courseDto.setMentorName(mentorRepository.findById(course.getMentor().getId()).get());
         Set<String> prerequisitesName=courseDto.getPrerequisiteTitles();
-        courseDto.setPrerequisiteTitles(course.getPrerequisites().stream().map(Course::getTitle).collect(Collectors.toSet()));
+        courseDto.setPrerequisiteTitles(course.getPrerequisites());
         return courseDto;
     }
 }

@@ -20,11 +20,12 @@ public class MentorService {
     CourseRepository courseRepository;
 
     public String addMentor(Mentor mentor) {
-        if(mentorRepository.existsByEmail(mentor.getEmail()))
+        if (mentorRepository.existsByEmail(mentor.getEmail()))
             return "Mentor already Present";
         mentorRepository.save(mentor);
         return "Mentor added successfully";
     }
+
     public List<Mentor> listMentor() {
         return mentorRepository.findAll();
     }
@@ -32,6 +33,7 @@ public class MentorService {
     public Optional<Mentor> showByName(String name) {
         return Optional.ofNullable((Mentor) mentorRepository.findByName(name).orElseThrow(() -> new RuntimeException("Mentor not found With Name:" + name)));
     }
+
     public Optional<Mentor> showById(long id) {
         return Optional.ofNullable((Mentor) mentorRepository.findById(id).orElseThrow(() -> new RuntimeException("Mentor not found With Id:" + id)));
     }
@@ -39,9 +41,9 @@ public class MentorService {
     public String updateMentor(long id, Mentor m) {
         Mentor existing = mentorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Mentor not found with id " + m.getId()));
-        if(m.getName() != null)
+        if (m.getName() != null)
             existing.setName(m.getName());
-        if(m.getEmail() != null)
+        if (m.getEmail() != null)
             existing.setEmail(m.getEmail());
 
         mentorRepository.save(existing);
@@ -49,9 +51,10 @@ public class MentorService {
     }
 
     public String deleteMentorById(long id) {
-        if(mentorRepository.existsById(id)){
+        if (mentorRepository.existsById(id)) {
             mentorRepository.deleteById(id);
-            return "Mentor Deleted Successfully";}
+            return "Mentor Deleted Successfully";
+        }
         return "Mentor Not Found";
     }
 

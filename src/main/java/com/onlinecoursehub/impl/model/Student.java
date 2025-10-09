@@ -7,13 +7,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,11 +43,17 @@ public class Student{
     @Column(name="student_registrationDate",nullable =false,updatable = false)
     @CreationTimestamp
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDateTime registrationDate;
+    private LocalDate registrationDate;
 
 
     @OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
     @JsonIgnore
+    @ToString.Exclude
     private List<Enrollment> enrollments=new ArrayList<>();
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ToString.Exclude
+    private List<Badge> badges = new ArrayList<>();
 
 }
