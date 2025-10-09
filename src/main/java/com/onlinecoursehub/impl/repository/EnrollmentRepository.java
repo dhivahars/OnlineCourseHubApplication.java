@@ -1,9 +1,11 @@
 package com.onlinecoursehub.impl.repository;
 
 import com.onlinecoursehub.impl.model.Enrollment;
+import com.onlinecoursehub.impl.model.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -11,4 +13,5 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment,Long> {
 
     boolean existsById(long enrollmentId);
 
+    List<Enrollment> findByStatus(Status status);
 }

@@ -1,16 +1,12 @@
 package com.onlinecoursehub.impl.service;
 
+import com.onlinecoursehub.impl.dto.CompletionRecordDto;
 import com.onlinecoursehub.impl.dto.EnrollmentDto;
 import com.onlinecoursehub.impl.model.*;
-import com.onlinecoursehub.impl.repository.BadgeRepository;
-import com.onlinecoursehub.impl.repository.CourseRepository;
-import com.onlinecoursehub.impl.repository.EnrollmentRepository;
-import com.onlinecoursehub.impl.repository.StudentRepository;
+import com.onlinecoursehub.impl.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.onlinecoursehub.impl.model.Status;
-
-import java.util.Optional;
 
 
 @Service
@@ -23,6 +19,8 @@ public class EnrollmentService {
     private BadgeRepository badgeRepository;
     @Autowired
     private EnrollmentRepository enrollmentRepository;
+    @Autowired
+    private CompletionRecordRepository completionRecordRepository;
 
 
     public String enrollForCourse(Long studentId, Long courseId) {
@@ -51,32 +49,32 @@ public class EnrollmentService {
         return "Course registration successfull........";
     }
 
-    public EnrollmentDto updateProgressByEnrollmentId(long enrollmentId, double progressPercentage) {
+    public Object updateProgressByEnrollmentId(long enrollmentId, double progressPercentage) {
         if (enrollmentRepository.existsById(enrollmentId)) {
-            if (enrollmentRepository.findById(enrollmentId).isEmpty()) {
-                return null;
-            }
-            if (enrollmentRepository.findById(enrollmentId).isEmpty())
-                return null;
-
             Enrollment enrollment=enrollmentRepository.findById(enrollmentId).get();
+            if (enrollment.getStatus() == Status.COMPLETED) {
+                throw new RuntimeException("Cannot update completed enrollment");
+            }
+
             Student student=enrollment.getStudent();
             Course course=enrollment.getCourse();
             enrollment.setProgressPercentage(progressPercentage);
             if (progressPercentage==100){
                 enrollment.setStatus(Status.COMPLETED);
+                CompletionRecord completionRecord=CompletionRecord.builder().studentEmail(student.getEmail()).studentName(student.getName()).courseName(course.getTitle()).build();
+                completionRecordRepository.save(completionRecord);
                 Badge badge = Badge.builder().name(course.getTitle() + ":Master").student(student).build();
                 if (badgeRepository.existsByName(badge.getName())){
                     studentRepository.save(student);
                     courseRepository.save(course);
-                    return entityToDto(enrollmentRepository.save(enrollment));
+                    return "Student Progress Updated\n"+entityToDto(enrollmentRepository.save(enrollment));
                 }
 
                 student.getBadges().add(badge);
                 studentRepository.save(student);
                 courseRepository.save(course);
 
-                return entityToDto(enrollmentRepository.save(enrollment),badge);
+                return "Student Progress Updated\n"+entityToDto(enrollmentRepository.save(enrollment),badge);
             }
             else if (progressPercentage>=50){
                 enrollment.setStatus(Status.HALF_WAY);
@@ -84,30 +82,27 @@ public class EnrollmentService {
                 if (badgeRepository.existsByName(badge.getName())){
                     studentRepository.save(student);
                     courseRepository.save(course);
-                    return entityToDto(enrollment);
+                    return "Student Progress Updated\n"+entityToDto(enrollment);
                 }
                 student.getBadges().add(badge);
                 studentRepository.save(student);
                 courseRepository.save(course);
                 enrollmentRepository.save(enrollment);
-                return entityToDto(enrollment,badge);
+                return "Student Progress Updated\n"+entityToDto(enrollment,badge);
             }
         }
-        return null;
+        return "No such enrollment record found";
     }
 
 
     public EnrollmentDto entityToDto(Enrollment enrollment) {
-        return new EnrollmentDto()
-                .builder()
+        return new EnrollmentDto().builder()
                 .courseTitle(enrollment.getCourse().getTitle())
                 .studentName(enrollment.getStudent().getName())
                 .status(enrollment.getStatus())
                 .build();
     }
-
     public EnrollmentDto entityToDto(Enrollment enrollment,Badge badge) {
         return new EnrollmentDto(enrollment.getStudent().getName(), enrollment.getCourse().getTitle(), enrollment.getStatus(), enrollment.getProgressPercentage(),badge.getName());
     }
-
 }
