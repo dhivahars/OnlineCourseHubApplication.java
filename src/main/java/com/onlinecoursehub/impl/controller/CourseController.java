@@ -54,4 +54,12 @@ public class CourseController {
         public ResponseEntity<String> getCourseCapacityByName(@PathVariable String name) {
             return ResponseEntity.ok(courseService.getCourseCapacityByName(name));
         }
+        @PutMapping("/assign-mentor/{courseId}/{mentorId}")
+        public ResponseEntity<Course> assignMentor(@PathVariable Long courseId, @PathVariable Long mentorId) {
+            return ResponseEntity.ok(courseService.assignMentorToCourse(courseId, mentorId));
+        }
+        @PostMapping("/create/{mentorId}")
+        public ResponseEntity<Course> createCourseWithMentor(@PathVariable Long mentorId, @RequestBody Course course) {
+            return ResponseEntity.ok(courseService.createCourseWithMentor(course, mentorId));
+        }
 }

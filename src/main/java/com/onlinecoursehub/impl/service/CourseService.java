@@ -1,8 +1,10 @@
 package com.onlinecoursehub.impl.service;
 
 import com.onlinecoursehub.impl.model.Course;
+import com.onlinecoursehub.impl.model.Mentor;
 import com.onlinecoursehub.impl.model.Student;
 import com.onlinecoursehub.impl.repository.CourseRepository;
+import com.onlinecoursehub.impl.repository.MentorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import java.util.Optional;
 public class CourseService {
     @Autowired
     CourseRepository courseRepository;
+    MentorRepository mentorRepository;
     public Course addCourse(Course course) {
         return  courseRepository.save(course);
     }
@@ -78,5 +81,22 @@ public class CourseService {
         return "Total Seats: " + course.getCapacity() +
                 ", Enrolled Students: " + course.getEnrollments().size() +
                 ", Available Seats: " + (course.getCapacity() - course.getEnrollments().size());
+    }
+    public Course createCourseWithMentor(Course course, Long mentorId) {
+        Mentor mentor = mentorRepository.findById(mentorId)
+                .orElseThrow(() -> new RuntimeException("Mentor not found with ID: " + mentorId));
+
+        course.setMentor(mentor);
+        return courseRepository.save(course);
+    }
+    public Course assignMentorToCourse(Long courseId, Long mentorId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found with ID: " + courseId));
+
+        Mentor mentor = mentorRepository.findById(mentorId)
+                .orElseThrow(() -> new RuntimeException("Mentor not found with ID: " + mentorId));
+
+        course.setMentor(mentor);
+        return courseRepository.save(course);
     }
 }
