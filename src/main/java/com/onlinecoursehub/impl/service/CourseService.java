@@ -1,7 +1,9 @@
 package com.onlinecoursehub.impl.service;
 
+import com.onlinecoursehub.impl.dto.CourseDto;
 import com.onlinecoursehub.impl.model.Course;
 import com.onlinecoursehub.impl.model.Mentor;
+import com.onlinecoursehub.impl.model.Enrollment;
 import com.onlinecoursehub.impl.model.Student;
 import com.onlinecoursehub.impl.repository.CourseRepository;
 import com.onlinecoursehub.impl.repository.MentorRepository;
@@ -9,31 +11,44 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
 public class CourseService {
     @Autowired
     CourseRepository courseRepository;
+    @Autowired
     MentorRepository mentorRepository;
-    public Course addCourse(Course course) {
-        return  courseRepository.save(course);
+    public CourseDto addCourse(Course course) {
+        Set<Course> prerequisites = new HashSet<>();
+        Course inputCourse = courseRepository.save(course);
+
+        if (prerequisites != null && !prerequisites.isEmpty()) {
+            Set<Course> addingPrequisites = prerequisites.stream()
+                    .map(c -> courseRepository.findById(c.getId()).get())
+                    .collect(Collectors.toSet());
+            inputCourse.setPrerequisites(addingPrequisites);
+        }
+
+        return entityToDto(courseRepository.save(inputCourse));
     }
+
 
     public List<Course> listCourse() {
         return courseRepository.findAll();
     }
 
-    public Optional<Course> showById(long id) {
-        return Optional.ofNullable(courseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Course not found With Id:" + id)));
+    public Optional<CourseDto> showById(long id) {
+        return Optional.ofNullable(entityToDto(courseRepository.findById(id).get()));
     }
 
-    public Optional<Course> showByName(String name) {
-        return Optional.ofNullable(Optional.ofNullable(courseRepository.findByTitle(name))
-                .orElseThrow(() -> new RuntimeException("Course not found With Id:" + name)));
+    public Optional<CourseDto> showByName(String name) {
+        return Optional.ofNullable(entityToDto(Optional.ofNullable(courseRepository.findByTitle(name)).get()));
     }
 
     public String updateCourse(long id, Course c) {
@@ -98,5 +113,15 @@ public class CourseService {
 
         course.setMentor(mentor);
         return courseRepository.save(course);
+
+    public CourseDto entityToDto(Course course){
+        CourseDto courseDto=new CourseDto();
+        courseDto.setTitle(course.getTitle());
+        courseDto.setDescription(course.getDescription());
+        courseDto.setCapacity(course.getCapacity());
+        courseDto.setMentorName(mentorRepository.findById(course.getMentor().getId()).get());
+        Set<String> prerequisitesName=courseDto.getPrerequisiteTitles();
+        courseDto.setPrerequisiteTitles(course.getPrerequisites().stream().map(Course::getTitle).collect(Collectors.toSet()));
+        return courseDto;
     }
 }

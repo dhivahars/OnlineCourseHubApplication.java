@@ -16,7 +16,7 @@ public class MentorController {
     @Autowired
     MentorService mentorService;
     @PostMapping("/create")
-    public ResponseEntity<Mentor> createMentor(@RequestBody Mentor mentor){
+    public ResponseEntity<String> createMentor(@RequestBody Mentor mentor){
         return new ResponseEntity<>(mentorService.addMentor(mentor), HttpStatus.CREATED);
     }
     @GetMapping("/list")
@@ -32,7 +32,7 @@ public class MentorController {
         return new ResponseEntity<>(mentorService.showById(id).get(),HttpStatus.CREATED);
     }
     @PatchMapping("/update/id/{id}")
-    public ResponseEntity<String> updateMentor(@PathVariable long id,Mentor m){
+    public ResponseEntity<String> updateMentor(@PathVariable long id,@RequestBody Mentor m){
         return ResponseEntity.ok(mentorService.updateMentor(id,m));
     }
     @DeleteMapping("/delete/id/{id}")
