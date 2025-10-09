@@ -15,5 +15,5 @@ import java.util.List;
 public class StudentDto {
     private String name;
     private String email;
-    private List<Long> enrollmentIds=new ArrayList<>();
+    private List<String> enrollments=new ArrayList<>();
 }

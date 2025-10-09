@@ -1,6 +1,7 @@
 package com.onlinecoursehub.impl.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.action.internal.OrphanRemovalAction;
@@ -34,18 +35,21 @@ public class Course {
 
     @ManyToOne
     @JoinColumn(name = "mentor_id", nullable = false)
+    @ToString.Exclude
     private Mentor mentor;
 
     @OneToMany(mappedBy = "course",cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("student")
+    @ToString.Exclude
     private List<Enrollment> enrollments=new ArrayList<>();
 
 
-    @ManyToMany
-    @JoinTable(
-            name = "course_prerequisite",
-            joinColumns = @JoinColumn(name = "course_id"),
-            inverseJoinColumns = @JoinColumn(name = "prerequisite_course_id")
-    )
-    @JsonIgnore
-    private Set<Course> prerequisites=new HashSet<>();
+//    @ManyToMany
+//    @JoinTable(
+//            name = "course_prerequisite",
+//            joinColumns = @JoinColumn(name = "course_id"),
+//            inverseJoinColumns = @JoinColumn(name = "prerequisite_course_id")
+//    )
+//    @JsonIgnore
+    private Set<String> prerequisites=new HashSet<>();
 }

@@ -1,16 +1,15 @@
 package com.onlinecoursehub.impl.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-enum Status{IN_PROGRESS,HALF_WAY,COMPLETED;}
+
 
 @Entity
 @Data
@@ -26,20 +25,22 @@ public class Enrollment {
 
     @ManyToOne
     @JoinColumn(name = "student_id",nullable = false)
+    @ToString.Exclude
     private Student student;
 
      @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
+     @ToString.Exclude
     private Course course;
 
    @Enumerated(EnumType.STRING)
     private Status status;
 
     @Column(name = "progress_percentage")
-    private int progressPercentage=0;
+    private double progressPercentage=0;
 
     @Column(name = "enrollment_date",nullable = false)
     @CreationTimestamp
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDateTime enrollmentDate;
+    private LocalDate enrollmentDate;
 }

@@ -39,4 +39,8 @@ public class MentorController {
     public ResponseEntity<String> deleteMentorById(@PathVariable long id){
         return ResponseEntity.ok(mentorService.deleteMentorById(id));
     }
+//    @PostMapping("/assign/course/id")
+//    public ResponseEntity<String> assignCourseById(@RequestParam long mentor_id,@RequestParam long course_id){
+//        return ResponseEntity.ok(mentorService.assignCourseById(mentor_id,course_id));
+//    }
 }
