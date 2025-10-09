@@ -2,6 +2,7 @@ package com.onlinecoursehub.impl.service;
 
 import com.onlinecoursehub.impl.dto.CourseDto;
 import com.onlinecoursehub.impl.model.Course;
+import com.onlinecoursehub.impl.model.Mentor;
 import com.onlinecoursehub.impl.model.Enrollment;
 import com.onlinecoursehub.impl.model.Student;
 import com.onlinecoursehub.impl.repository.CourseRepository;
@@ -97,6 +98,22 @@ public class CourseService {
                 ", Enrolled Students: " + course.getEnrollments().size() +
                 ", Available Seats: " + (course.getCapacity() - course.getEnrollments().size());
     }
+    public Course createCourseWithMentor(Course course, Long mentorId) {
+        Mentor mentor = mentorRepository.findById(mentorId)
+                .orElseThrow(() -> new RuntimeException("Mentor not found with ID: " + mentorId));
+
+        course.setMentor(mentor);
+        return courseRepository.save(course);
+    }
+    public Course assignMentorToCourse(Long courseId, Long mentorId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found with ID: " + courseId));
+
+        Mentor mentor = mentorRepository.findById(mentorId)
+                .orElseThrow(() -> new RuntimeException("Mentor not found with ID: " + mentorId));
+
+        course.setMentor(mentor);
+        return courseRepository.save(course);
 
     public CourseDto entityToDto(Course course){
         CourseDto courseDto=new CourseDto();
