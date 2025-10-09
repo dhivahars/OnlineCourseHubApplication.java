@@ -23,7 +23,8 @@ public class CourseService {
     CourseRepository courseRepository;
     @Autowired
     MentorRepository mentorRepository;
-    public CourseDto addCourse(Course course) {
+
+    public CourseDto addCourse(Course course){
         Set<Course> prerequisites = new HashSet<>();
         Course inputCourse = courseRepository.save(course);
 
@@ -38,8 +39,8 @@ public class CourseService {
     }
 
 
-    public List<Course> listCourse() {
-        return courseRepository.findAll();
+    public List<CourseDto> listCourse() {
+        return courseRepository.findAll().stream().map(this::entityToDto).toList();
     }
 
     public Optional<CourseDto> showById(long id) {

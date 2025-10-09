@@ -1,7 +1,8 @@
 package com.onlinecoursehub.impl.service;
 
+import com.onlinecoursehub.impl.model.Course;
 import com.onlinecoursehub.impl.model.Mentor;
-import com.onlinecoursehub.impl.model.Student;
+import com.onlinecoursehub.impl.repository.CourseRepository;
 import com.onlinecoursehub.impl.repository.MentorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ public class MentorService {
 
     @Autowired
     MentorRepository mentorRepository;
+
+    @Autowired
+    CourseRepository courseRepository;
 
     public String addMentor(Mentor mentor) {
         if(mentorRepository.existsByEmail(mentor.getEmail()))
@@ -50,4 +54,17 @@ public class MentorService {
             return "Mentor Deleted Successfully";}
         return "Mentor Not Found";
     }
+
+//    public String assignCourseById(long mentor_id, long course_id) {
+//       Mentor mentor= mentorRepository.findById(mentor_id).get();
+//       Course course=courseRepository.findById(course_id).get();
+//        if(course.getMentor() == null){
+//       mentor.getCourseList().add(course);
+//       course.setMentor(mentor);
+//       courseRepository.save(course);
+//       mentorRepository.save(mentor);
+//       return "Assigned course for mentor successfully";
+//        }
+//        return "course already has a mentor";
+//    }
 }

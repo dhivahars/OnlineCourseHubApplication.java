@@ -1,8 +1,10 @@
 package com.onlinecoursehub.impl.service;
 
+import com.onlinecoursehub.impl.model.Badge;
 import com.onlinecoursehub.impl.model.Course;
 import com.onlinecoursehub.impl.model.Enrollment;
 import com.onlinecoursehub.impl.model.Student;
+import com.onlinecoursehub.impl.repository.BadgeRepository;
 import com.onlinecoursehub.impl.repository.CourseRepository;
 import com.onlinecoursehub.impl.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ public class EnrollmentService {
     private StudentRepository studentRepository;
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private BadgeRepository badgeRepository;
 
 
     public String enrollForCourse(Long studentId, Long courseId) {
@@ -37,6 +41,10 @@ public class EnrollmentService {
             course.getEnrollments().add(e);
            studentRepository.save(student);
            courseRepository.save(course);
+           Badge badge= Badge.builder()
+                   .name(course.getTitle()+":Begginer")
+                   .student(student)
+                   .build();
         }
         return "Course registration successfull........";
 

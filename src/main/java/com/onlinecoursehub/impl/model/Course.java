@@ -37,6 +37,7 @@ public class Course {
     private Mentor mentor;
 
     @OneToMany(mappedBy = "course",cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Enrollment> enrollments=new ArrayList<>();
 
 

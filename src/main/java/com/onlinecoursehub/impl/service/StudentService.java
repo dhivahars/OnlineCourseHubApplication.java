@@ -17,7 +17,7 @@ public class StudentService {
     StudentRepository studentRepository;
     public StudentDto addStudent(Student s){
         if(studentRepository.existsByEmail(s.getEmail()))
-            return null;
+        return null;
 
        studentRepository.save(s);
        return entityToDto(s);
@@ -65,7 +65,7 @@ public class StudentService {
         return "Student Not Found";
     }
     public static StudentDto entityToDto(Student student){
-        return new StudentDto(student.getName(),student.getEmail(),student.getEnrollments().stream().map(Enrollment::getId).toList());
+        return new StudentDto(student.getName(),student.getEmail(),student.getEnrollments().stream().map(Enrollment::getCourse).map(a->a.getTitle()).toList());
     }
 
 }

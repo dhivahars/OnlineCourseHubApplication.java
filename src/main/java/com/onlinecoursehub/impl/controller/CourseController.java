@@ -24,7 +24,7 @@ public class CourseController {
         }
 
         @GetMapping("/list")
-        public ResponseEntity<List<Course>> showCourse(){
+        public ResponseEntity<List<CourseDto>> showCourse(){
             return new ResponseEntity<>(courseService.listCourse(),HttpStatus.FOUND);
         }
         @GetMapping("/id/{id}")

@@ -12,7 +12,7 @@ public class EnrollmentController{
     private EnrollmentService enrollmentService;
 
     @PostMapping("/enroll")
-    public ResponseEntity<String> addStudent(@RequestBody Long studentId,@RequestBody Long  courseId){
+    public ResponseEntity<String> addStudent(@RequestParam Long studentId,@RequestParam Long  courseId){
         return ResponseEntity.ok(enrollmentService.enrollForCourse(studentId,courseId));
     }
 }
