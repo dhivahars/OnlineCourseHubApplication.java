@@ -1,12 +1,13 @@
 package com.onlinecoursehub.impl.service;
 
-import com.onlinecoursehub.impl.dto.CompletionRecordDto;
 import com.onlinecoursehub.impl.dto.EnrollmentDto;
 import com.onlinecoursehub.impl.model.*;
 import com.onlinecoursehub.impl.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.onlinecoursehub.impl.model.Status;
+
+import java.util.List;
 
 
 @Service
@@ -104,5 +105,23 @@ public class EnrollmentService {
     }
     public EnrollmentDto entityToDto(Enrollment enrollment,Badge badge) {
         return new EnrollmentDto(enrollment.getStudent().getName(), enrollment.getCourse().getTitle(), enrollment.getStatus(), enrollment.getProgressPercentage(),badge.getName());
+    }
+
+    public Object unenrollByEnrollmentId(long enrollmentId, long courseId) {
+            if(!enrollmentRepository.existsByEnrolmentIdAndCourseId(enrollmentId, courseId))
+                return "Enrollments not found";
+
+            Enrollment enrollment=enrollmentRepository.findById(enrollmentId).get();
+            enrollmentRepository.delete(enrollment);
+
+            return enrollment.getCourse().getTitle()+"Enrollement deleted successfully";
+    }
+
+    public List<EnrollmentDto> getEnrollmentList() {
+        return enrollmentRepository.findAll().stream().map(this::entityToDto).toList();
+    }
+
+    public EnrollmentDto getEnrollmentById(long id){
+        return entityToDto(enrollmentRepository.getById(id));
     }
 }

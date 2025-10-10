@@ -20,10 +20,7 @@ public class StudentController {
 
     @PostMapping("/add")
     public ResponseEntity<Object> addStudent(@RequestBody Student student) {
-        if (studentService.addStudent(student) != null) {
-            return ResponseEntity.ok(new StudentDto(student.getName(), student.getEmail(), student.getEnrollments().stream().map(Enrollment::getCourse).map(a -> a.getTitle()).toList()));
-        }
-        return ResponseEntity.badRequest().body("Email Already Exists");
+        return ResponseEntity.ok(studentService.addStudent(student));
     }
 
     @GetMapping("/list")
@@ -33,7 +30,7 @@ public class StudentController {
 
     @GetMapping("/search/id/{id}")
     public ResponseEntity<StudentDto> getStudentById(@PathVariable long id) {
-        return ResponseEntity.ok(StudentService.entityToDto(studentService.getStudentById(id).get()));
+        return ResponseEntity.ok(studentService.entityToDto(studentService.getStudentById(id).get()));
     }
 
     @GetMapping("/search/name/{name}")
