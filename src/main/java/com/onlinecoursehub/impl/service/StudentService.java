@@ -15,9 +15,9 @@ public class StudentService {
     @Autowired
     StudentRepository studentRepository;
 
-    public StudentDto addStudent(Student s) {
+    public Object addStudent(Student s) {
         if (studentRepository.existsByEmail(s.getEmail())) {
-            return null;
+            return "Mail already exists";
         }
 
         studentRepository.save(s);
@@ -64,7 +64,7 @@ public class StudentService {
         return "Student Not Found";
     }
 
-    public static StudentDto entityToDto(Student student) {
+    public StudentDto entityToDto(Student student) {
         return new StudentDto(student.getName(), student.getEmail(), student.getEnrollments().stream().map(Enrollment::getCourse).map(a -> a.getTitle()).toList());
     }
 
