@@ -27,11 +27,11 @@ public class CourseController {
         public ResponseEntity<List<CourseDto>> showCourse(){
             return new ResponseEntity<>(courseService.listCourse(),HttpStatus.FOUND);
         }
-        @GetMapping("/id/{id}")
+        @GetMapping("/search/id/{id}")
         public ResponseEntity<CourseDto> ShowById(@PathVariable long id){
             return new ResponseEntity<>(courseService.showById(id).get(),HttpStatus.FOUND);
         }
-        @GetMapping("/name/{name}")
+        @GetMapping("/search/name/{name}")
         public ResponseEntity<CourseDto> ShowById(@PathVariable String name){
             return new ResponseEntity<>(courseService.showByName(name).get(),HttpStatus.FOUND);
         }
@@ -59,7 +59,7 @@ public class CourseController {
         public ResponseEntity<Course> assignMentor(@PathVariable Long courseId, @PathVariable Long mentorId) {
             return ResponseEntity.ok(courseService.assignMentorToCourse(courseId, mentorId));
         }
-        @PostMapping("/create/{mentorId}")
+        @PostMapping("/create-with-mentor/{mentorId}")
         public ResponseEntity<Course> createCourseWithMentor(@PathVariable Long mentorId, @RequestBody Course course) {
             return ResponseEntity.ok(courseService.createCourseWithMentor(course, mentorId));
         }

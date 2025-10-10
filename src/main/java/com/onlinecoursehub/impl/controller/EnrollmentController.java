@@ -21,10 +21,6 @@ public class EnrollmentController {
     @PatchMapping("/update/progress/id")
     public Object updateProgressByStudentIdAndCourseId(@RequestParam long enrollmentId,
                                                        @RequestParam double progressPercentage) {
-        EnrollmentDto enrollmentDto=enrollmentService.updateProgressByEnrollmentId(enrollmentId, progressPercentage);
-        if ( enrollmentDto!= null)
-            return "Student progress Updated Successfully\n"+enrollmentDto;
-
-        return "The student and course pair doesnt exists";
+        return enrollmentService.updateProgressByEnrollmentId(enrollmentId, progressPercentage);
     }
 }

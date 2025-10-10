@@ -23,11 +23,11 @@ public class MentorController {
     public ResponseEntity<List<Mentor>> ShowMentorList(){
         return new ResponseEntity<>(mentorService.listMentor(),HttpStatus.CREATED);
     }
-    @GetMapping("/name/{name}")
+    @GetMapping("/search/name/{name}")
     public  ResponseEntity<Mentor> listByName(@PathVariable String name){
         return new ResponseEntity<>(mentorService.showByName(name).get(),HttpStatus.CREATED);
     }
-    @GetMapping("/id/{id}")
+    @GetMapping("/search/id/{id}")
     public  ResponseEntity<Mentor> listById(@PathVariable long id){
         return new ResponseEntity<>(mentorService.showById(id).get(),HttpStatus.CREATED);
     }

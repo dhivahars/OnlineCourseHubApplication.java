@@ -18,7 +18,7 @@ public class StudentController {
     @Autowired
     StudentService studentService;
 
-    @PostMapping("/enroll")
+    @PostMapping("/add")
     public ResponseEntity<Object> addStudent(@RequestBody Student student) {
         if (studentService.addStudent(student) != null) {
             return ResponseEntity.ok(new StudentDto(student.getName(), student.getEmail(), student.getEnrollments().stream().map(Enrollment::getCourse).map(a -> a.getTitle()).toList()));
@@ -26,22 +26,22 @@ public class StudentController {
         return ResponseEntity.badRequest().body("Email Already Exists");
     }
 
-    @GetMapping("/enrolled")
+    @GetMapping("/list")
     public ResponseEntity<List<StudentDto>> studentsList() {
         return ResponseEntity.ok(studentService.getStudentsList());
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/search/id/{id}")
     public ResponseEntity<StudentDto> getStudentById(@PathVariable long id) {
         return ResponseEntity.ok(StudentService.entityToDto(studentService.getStudentById(id).get()));
     }
 
-    @GetMapping("name/{name}")
+    @GetMapping("/search/name/{name}")
     public ResponseEntity<StudentDto> getStudentByName(@PathVariable String name) {
         return ResponseEntity.ok(studentService.entityToDto(studentService.getStudentByName(name).get()));
     }
 
-    @PatchMapping("/update/{id}")
+    @PatchMapping("/update/id/{id}")
     public ResponseEntity<String> updateStudent(@PathVariable long id, @RequestBody Student s) {
         return ResponseEntity.ok(studentService.updateStudent(id, s));
     }
