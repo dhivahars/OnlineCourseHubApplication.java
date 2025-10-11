@@ -21,7 +21,7 @@ public class MentorService {
 
     public String addMentor(Mentor mentor) {
         if (mentorRepository.existsByEmail(mentor.getEmail()))
-            return "Mentor already Present";
+            throw new RuntimeException("Mentor already Present");
         mentorRepository.save(mentor);
         return "Mentor added successfully";
     }
@@ -55,7 +55,7 @@ public class MentorService {
             mentorRepository.deleteById(id);
             return "Mentor Deleted Successfully";
         }
-        return "Mentor Not Found";
+        throw new RuntimeException("Mentor Not Found");
     }
 
 //    public String assignCourseById(long mentor_id, long course_id) {

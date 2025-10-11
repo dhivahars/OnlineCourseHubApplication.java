@@ -71,7 +71,7 @@ public class CourseService {
             courseRepository.deleteById(id);
             return "Course Deleted Successfully";}
 
-        return "Course Not Found";
+        throw new RuntimeException( "Course Not Found");
     }
 
     public String deleteCourseByTitle(String name) {
@@ -79,7 +79,7 @@ public class CourseService {
             courseRepository.deleteByTitle(name);
             return "Course Deleted Successfully";
         }
-        return "Course Not Found";
+        throw new RuntimeException( "Course Not Found");
     }
     public String getCourseCapacityById(long courseId) {
         Course course = courseRepository.findById(courseId)

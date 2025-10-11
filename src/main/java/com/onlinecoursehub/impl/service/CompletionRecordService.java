@@ -26,6 +26,8 @@ public class CompletionRecordService {
     @Autowired
     private BadgeRepository badgeRepository;
     public Map<String, List<CompletionRecordDto>> getCompletedCourseHistory() {
+        if(enrollmentRepository.findByStatus(Status.COMPLETED).isEmpty())
+            throw new RuntimeException("No records found");
         List<Enrollment> completedEnrollments = enrollmentRepository.findByStatus(Status.COMPLETED);
         List<CompletionRecordDto> dtoList = completedEnrollments.stream()
                 .map(e -> CompletionRecordDto.builder()

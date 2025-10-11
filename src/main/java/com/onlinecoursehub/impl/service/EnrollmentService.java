@@ -26,12 +26,16 @@ public class EnrollmentService {
 
     public String enrollForCourse(Long studentId, Long courseId) {
         if (!studentRepository.existsById(studentId))
-            return "Student doesn't exists in the database";
+            throw new IllegalArgumentException( "Student doesn't exists in the database");
         if (!courseRepository.existsById(courseId))
-            return "course doesn't available in our platform";
+           throw new IllegalArgumentException("course doesn't available in our platform");
 
         if (studentRepository.findById(studentId).get().getEnrollments().contains(courseId) || courseRepository.findById(courseId).get().getEnrollments().contains(studentId))
-            return "Student already registered for the course";
+            throw new RuntimeException("Student already registered for the course");
+        if (studentRepository.findById(studentId).get().getEnrollments().size()>5)
+            throw new RuntimeException("Student enrolment limit exceeded............");
+        if(courseRepository.getById(courseId).getEnrollments().size()>courseRepository.getById(courseId).getCapacity())
+            throw new RuntimeException( "Cousrse limit exceeded");
 
         if ((courseRepository.findById(courseId).get().getCapacity() - courseRepository.findById(courseId).get().getEnrollments().size()) > 0) {
             Course course = courseRepository.findById(courseId).get();
@@ -92,7 +96,7 @@ public class EnrollmentService {
                 return "Student Progress Updated\n"+entityToDto(enrollment,badge);
             }
         }
-        return "No such enrollment record found";
+        throw new RuntimeException("No such enrollment record found");
     }
 
 
@@ -109,7 +113,7 @@ public class EnrollmentService {
 
     public Object unenrollByEnrollmentId(long enrollmentId, long courseId) {
             if(!enrollmentRepository.existsByEnrolmentIdAndCourseId(enrollmentId, courseId))
-                return "Enrollments not found";
+                throw new RuntimeException("Enrollments not found");
 
             Enrollment enrollment=enrollmentRepository.findById(enrollmentId).get();
             enrollmentRepository.delete(enrollment);
