@@ -3,6 +3,7 @@ package com.onlinecoursehub.impl.service;
 import com.onlinecoursehub.impl.dto.EnrollmentDto;
 import com.onlinecoursehub.impl.model.*;
 import com.onlinecoursehub.impl.repository.*;
+import com.onlinecoursehub.impl.utils.Badge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.onlinecoursehub.impl.model.Status;
@@ -26,16 +27,14 @@ public class EnrollmentService {
 
     public String enrollForCourse(Long studentId, Long courseId) {
         if (!studentRepository.existsById(studentId))
-            throw new IllegalArgumentException( "Student doesn't exists in the database");
+            throw new RuntimeException( "Student doesn't exists in the database");
         if (!courseRepository.existsById(courseId))
-           throw new IllegalArgumentException("course doesn't available in our platform");
+           throw new RuntimeException("course doesn't available in our platform");
 
         if (studentRepository.findById(studentId).get().getEnrollments().contains(courseId) || courseRepository.findById(courseId).get().getEnrollments().contains(studentId))
             throw new RuntimeException("Student already registered for the course");
         if (studentRepository.findById(studentId).get().getEnrollments().size()>5)
             throw new RuntimeException("Student enrolment limit exceeded............");
-        if(courseRepository.getById(courseId).getEnrollments().size()>courseRepository.getById(courseId).getCapacity())
-            throw new RuntimeException( "Cousrse limit exceeded");
 
         if ((courseRepository.findById(courseId).get().getCapacity() - courseRepository.findById(courseId).get().getEnrollments().size()) > 0) {
             Course course = courseRepository.findById(courseId).get();

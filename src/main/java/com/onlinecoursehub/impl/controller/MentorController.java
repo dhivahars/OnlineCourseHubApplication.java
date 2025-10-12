@@ -1,5 +1,6 @@
 package com.onlinecoursehub.impl.controller;
 
+import com.onlinecoursehub.impl.dto.MentorDto;
 import com.onlinecoursehub.impl.model.Course;
 import com.onlinecoursehub.impl.model.Mentor;
 import com.onlinecoursehub.impl.service.MentorService;
@@ -20,7 +21,7 @@ public class MentorController {
         return new ResponseEntity<>(mentorService.addMentor(mentor), HttpStatus.CREATED);
     }
     @GetMapping("/list")
-    public ResponseEntity<List<Mentor>> ShowMentorList(){
+    public ResponseEntity<List<MentorDto>> ShowMentorList(){
         return new ResponseEntity<>(mentorService.listMentor(),HttpStatus.CREATED);
     }
     @GetMapping("/search/name/{name}")
