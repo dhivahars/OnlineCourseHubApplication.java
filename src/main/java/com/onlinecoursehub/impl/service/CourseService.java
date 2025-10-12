@@ -46,7 +46,7 @@ public class CourseService {
     }
 
     public Optional<CourseDto> showById(long id) {
-        return Optional.ofNullable(entityToDto(courseRepository.findById(id).get()));
+        return Optional.ofNullable(entityToDto(courseRepository.findById(id).orElseThrow(()->new RuntimeException("Course not found"))));
     }
 
     public Optional<CourseDto> showByName(String name) {

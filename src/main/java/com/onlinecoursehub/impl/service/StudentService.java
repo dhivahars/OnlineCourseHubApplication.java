@@ -54,7 +54,7 @@ public class StudentService {
             return "Student Deleted Successfully";
         }
 
-        throw new IllegalArgumentException("Student Not Found");
+        throw new RuntimeException("Student Not Found");
     }
 
     public String deleteStudentByName(String name) {
