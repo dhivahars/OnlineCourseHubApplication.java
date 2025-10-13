@@ -14,6 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CourseDto {
+    private long id;
     private String title;
     private String description;
     private int capacity;
