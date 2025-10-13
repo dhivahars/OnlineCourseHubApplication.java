@@ -38,9 +38,7 @@ public class EnrollmentService {
         Course course = courseRepository.findById(courseId).get();
         Student student = studentRepository.findById(studentId).get();
         if(!course.getPrerequisites().isEmpty()){
-            List<Course> completedCourse=student.getEnrollments().stream().filter(e->e.getStatus()==Status.COMPLETED).map(a->a.getCourse())
-                    .toList();
-            if (completedCourse.isEmpty()||!completedCourse.contains(course.getPrerequisites())){
+            if (student.getSkills().isEmpty()||!student.getSkills().containsAll(course.getPrerequisites())){
                 throw new RuntimeException("Prerequisite doesn't met......."+"\n to enroll this course you have to complete:"+course.getPrerequisites());
             }
         }
@@ -71,6 +69,7 @@ public class EnrollmentService {
             enrollment.setProgressPercentage(progressPercentage);
             if (progressPercentage==100){
                 enrollment.setStatus(Status.COMPLETED);
+                student.getSkills().add(course.getSkill());
                 CompletionRecord completionRecord=CompletionRecord.builder().studentEmail(student.getEmail()).studentName(student.getName()).courseName(course.getTitle()).build();
                 completionRecordRepository.save(completionRecord);
                 Badge badge = Badge.builder().name(course.getTitle() + ":Master").student(student).build();
