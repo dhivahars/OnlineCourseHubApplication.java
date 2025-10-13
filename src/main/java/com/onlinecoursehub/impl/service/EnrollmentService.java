@@ -54,6 +54,7 @@ public class EnrollmentService {
             studentRepository.save(student);
             courseRepository.save(course);
             Badge badge = Badge.builder().name(course.getTitle() + ":Begginer").student(student).build();
+//            badgeRepository.save(badge);
         }
         return "Course registration successfull........";
     }
@@ -64,6 +65,8 @@ public class EnrollmentService {
             if (enrollment.getStatus() == Status.COMPLETED) {
                 throw new RuntimeException("Cannot update completed enrollment");
             }
+            if(progressPercentage<enrollment.getProgressPercentage())
+                throw new RuntimeException("Error...............");
 
             Student student=enrollment.getStudent();
             Course course=enrollment.getCourse();
