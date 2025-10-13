@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 
@@ -27,6 +28,7 @@ public class CompletionRecord {
     private String studentEmail;
 
     @Column(name="completion_date")
+    @CreationTimestamp
     private LocalDate completionDate;
 
     @Column(name = "course_name")

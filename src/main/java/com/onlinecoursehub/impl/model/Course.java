@@ -1,6 +1,5 @@
 package com.onlinecoursehub.impl.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -51,4 +50,7 @@ public class Course {
 //    )
 //    @JsonIgnore
     private Set<String> prerequisites=new HashSet<>();
+
+    @Column(name="skill")
+    private String skill;
 }
