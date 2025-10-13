@@ -13,7 +13,9 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -55,4 +57,6 @@ public class Student{
     @ToString.Exclude
     private List<Badge> badges = new ArrayList<>();
 
+    @Column(name="skills")
+    private Set<String> Skills=new HashSet<>();
 }
