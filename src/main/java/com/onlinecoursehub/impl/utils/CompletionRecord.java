@@ -1,4 +1,4 @@
-package com.onlinecoursehub.impl.model;
+package com.onlinecoursehub.impl.utils;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

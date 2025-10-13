@@ -28,6 +28,7 @@ public class CourseService {
     public CourseDto addCourse(Course course){
        return entityToDto(courseRepository.save(course));
 //        Set<Course> prerequisites = new HashSet<>();
+//        prerequisites=course.getPrerequisites();
 //        Course inputCourse = courseRepository.save(course);
 //
 //        if (prerequisites != null && !prerequisites.isEmpty()) {
@@ -122,7 +123,7 @@ public class CourseService {
         courseDto.setDescription(course.getDescription());
         courseDto.setCapacity(course.getCapacity());
         courseDto.setMentorName(mentorRepository.findById(course.getMentor().getId()).get());
-        Set<String> prerequisitesName=courseDto.getPrerequisiteTitles();
+//        Set<String> prerequisitesName=courseDto.getPrerequisiteTitles().addAll();
         courseDto.setPrerequisiteTitles(course.getPrerequisites());
         return courseDto;
     }

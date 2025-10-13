@@ -4,6 +4,7 @@ import com.onlinecoursehub.impl.dto.EnrollmentDto;
 import com.onlinecoursehub.impl.model.*;
 import com.onlinecoursehub.impl.repository.*;
 import com.onlinecoursehub.impl.utils.Badge;
+import com.onlinecoursehub.impl.utils.CompletionRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.onlinecoursehub.impl.model.Status;
@@ -30,15 +31,20 @@ public class EnrollmentService {
             throw new RuntimeException( "Student doesn't exists in the database");
         if (!courseRepository.existsById(courseId))
            throw new RuntimeException("course doesn't available in our platform");
-
         if (studentRepository.findById(studentId).get().getEnrollments().contains(courseId) || courseRepository.findById(courseId).get().getEnrollments().contains(studentId))
             throw new RuntimeException("Student already registered for the course");
         if (studentRepository.findById(studentId).get().getEnrollments().size()>5)
             throw new RuntimeException("Student enrolment limit exceeded............");
-
-        if ((courseRepository.findById(courseId).get().getCapacity() - courseRepository.findById(courseId).get().getEnrollments().size()) > 0) {
-            Course course = courseRepository.findById(courseId).get();
-            Student student = studentRepository.findById(studentId).get();
+        Course course = courseRepository.findById(courseId).get();
+        Student student = studentRepository.findById(studentId).get();
+        if(!course.getPrerequisites().isEmpty()){
+            List<Course> completedCourse=student.getEnrollments().stream().filter(e->e.getStatus()==Status.COMPLETED).map(a->a.getCourse())
+                    .toList();
+            if (completedCourse.isEmpty()||!completedCourse.contains(course.getPrerequisites())){
+                throw new RuntimeException("Prerequisite doesn't met......."+"\n to enroll this course you have to complete:"+course.getPrerequisites());
+            }
+        }
+        if ((course.getCapacity() - course.getEnrollments().size()) > 0) {
             Enrollment e = new Enrollment();
             e.setStatus(Status.IN_PROGRESS);
             e.setCourse(course);
