@@ -26,6 +26,9 @@ public class CourseService {
     MentorRepository mentorRepository;
 
     public CourseDto addCourse(Course course){
+        if(courseRepository.existsByTitle(course.getTitle())){
+            throw new RuntimeException("Course already exists with title: " + course.getTitle());
+        }
        return entityToDto(courseRepository.save(course));
 //        Set<Course> prerequisites = new HashSet<>();
 //        Course inputCourse = courseRepository.save(course);
@@ -81,6 +84,7 @@ public class CourseService {
         }
         return "Course Not Found";
     }
+
     public String getCourseCapacityById(long courseId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found with Id: " + courseId));

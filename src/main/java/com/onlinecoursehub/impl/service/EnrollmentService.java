@@ -11,6 +11,7 @@ import com.onlinecoursehub.impl.model.Status;
 
 @Service
 public class EnrollmentService {
+
     @Autowired
     private StudentRepository studentRepository;
     @Autowired

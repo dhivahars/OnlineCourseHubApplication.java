@@ -25,6 +25,7 @@ public class CompletionRecordService {
     private CourseRepository courseRepository;
     @Autowired
     private BadgeRepository badgeRepository;
+
     public Map<String, List<CompletionRecordDto>> getCompletedCourseHistory() {
         List<Enrollment> completedEnrollments = enrollmentRepository.findByStatus(Status.COMPLETED);
         List<CompletionRecordDto> dtoList = completedEnrollments.stream()

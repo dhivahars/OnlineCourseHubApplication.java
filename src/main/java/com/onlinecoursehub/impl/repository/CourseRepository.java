@@ -11,4 +11,6 @@ public interface  CourseRepository extends JpaRepository<Course,Long> {
     Course findByTitle(String name);
 
     void deleteByTitle(String name);
+
+    boolean existsByTitle(String title);
 }
