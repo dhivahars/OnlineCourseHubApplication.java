@@ -1,10 +1,8 @@
 package com.onlinecoursehub.impl.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.action.internal.OrphanRemovalAction;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -52,4 +50,7 @@ public class Course {
 //    )
 //    @JsonIgnore
     private Set<String> prerequisites=new HashSet<>();
+
+    @Column(name="skill")
+    private String skill;
 }

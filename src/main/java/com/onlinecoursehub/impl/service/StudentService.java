@@ -15,9 +15,9 @@ public class StudentService {
     @Autowired
     StudentRepository studentRepository;
 
-    public StudentDto addStudent(Student s) {
+    public Object addStudent(Student s) {
         if (studentRepository.existsByEmail(s.getEmail())) {
-            return null;
+            throw new RuntimeException("Mail already exists");
         }
 
         studentRepository.save(s);
@@ -25,7 +25,7 @@ public class StudentService {
     }
 
     public List<StudentDto> getStudentsList() {
-        return studentRepository.findAll().stream().map(StudentService::entityToDto).toList();
+        return studentRepository.findAll().stream().map(this::entityToDto).toList();
     }
 
     public Optional<Student> getStudentById(long id) {
@@ -39,8 +39,10 @@ public class StudentService {
     public String updateStudent(long id, Student s) {
         Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found with id " + s.getId()));
 
-        if (s.getName() != null) student.setName(s.getName());
-        if (s.getEmail() != null) student.setEmail(s.getEmail());
+        if (s.getName() != null)
+            student.setName(s.getName());
+        if (s.getEmail() != null)
+            student.setEmail(s.getEmail());
 
         studentRepository.save(student);
         return "Student updated successfully";
@@ -52,7 +54,7 @@ public class StudentService {
             return "Student Deleted Successfully";
         }
 
-        return "Student Not Found";
+        throw new RuntimeException("Student Not Found");
     }
 
     public String deleteStudentByName(String name) {
@@ -61,10 +63,10 @@ public class StudentService {
             return "Student Deleted Successfully";
         }
 
-        return "Student Not Found";
+        throw new RuntimeException("Student Not Found");
     }
 
-    public static StudentDto entityToDto(Student student) {
+    public StudentDto entityToDto(Student student) {
         return new StudentDto(student.getName(), student.getEmail(), student.getEnrollments().stream().map(Enrollment::getCourse).map(a -> a.getTitle()).toList());
     }
 

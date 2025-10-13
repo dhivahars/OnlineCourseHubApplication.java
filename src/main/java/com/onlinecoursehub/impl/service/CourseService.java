@@ -31,6 +31,7 @@ public class CourseService {
         }
        return entityToDto(courseRepository.save(course));
 //        Set<Course> prerequisites = new HashSet<>();
+//        prerequisites=course.getPrerequisites();
 //        Course inputCourse = courseRepository.save(course);
 //
 //        if (prerequisites != null && !prerequisites.isEmpty()) {
@@ -49,7 +50,7 @@ public class CourseService {
     }
 
     public Optional<CourseDto> showById(long id) {
-        return Optional.ofNullable(entityToDto(courseRepository.findById(id).get()));
+        return Optional.ofNullable(entityToDto(courseRepository.findById(id).orElseThrow(()->new RuntimeException("Course not found"))));
     }
 
     public Optional<CourseDto> showByName(String name) {
@@ -74,7 +75,7 @@ public class CourseService {
             courseRepository.deleteById(id);
             return "Course Deleted Successfully";}
 
-        return "Course Not Found";
+        throw new RuntimeException( "Course Not Found");
     }
 
     public String deleteCourseByTitle(String name) {
@@ -82,7 +83,7 @@ public class CourseService {
             courseRepository.deleteByTitle(name);
             return "Course Deleted Successfully";
         }
-        return "Course Not Found";
+        throw new RuntimeException( "Course Not Found");
     }
 
     public String getCourseCapacityById(long courseId) {
@@ -126,7 +127,7 @@ public class CourseService {
         courseDto.setDescription(course.getDescription());
         courseDto.setCapacity(course.getCapacity());
         courseDto.setMentorName(mentorRepository.findById(course.getMentor().getId()).get());
-        Set<String> prerequisitesName=courseDto.getPrerequisiteTitles();
+//        Set<String> prerequisitesName=courseDto.getPrerequisiteTitles().addAll();
         courseDto.setPrerequisiteTitles(course.getPrerequisites());
         return courseDto;
     }

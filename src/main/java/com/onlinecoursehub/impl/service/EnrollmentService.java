@@ -1,12 +1,15 @@
 package com.onlinecoursehub.impl.service;
 
-import com.onlinecoursehub.impl.dto.CompletionRecordDto;
 import com.onlinecoursehub.impl.dto.EnrollmentDto;
 import com.onlinecoursehub.impl.model.*;
 import com.onlinecoursehub.impl.repository.*;
+import com.onlinecoursehub.impl.utils.Badge;
+import com.onlinecoursehub.impl.utils.CompletionRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.onlinecoursehub.impl.model.Status;
+
+import java.util.List;
 
 
 @Service
@@ -26,16 +29,21 @@ public class EnrollmentService {
 
     public String enrollForCourse(Long studentId, Long courseId) {
         if (!studentRepository.existsById(studentId))
-            return "Student doesn't exists in the database";
+            throw new RuntimeException( "Student doesn't exists in the database");
         if (!courseRepository.existsById(courseId))
-            return "course doesn't available in our platform";
-
+           throw new RuntimeException("course doesn't available in our platform");
         if (studentRepository.findById(studentId).get().getEnrollments().contains(courseId) || courseRepository.findById(courseId).get().getEnrollments().contains(studentId))
-            return "Student already registered for the course";
-
-        if ((courseRepository.findById(courseId).get().getCapacity() - courseRepository.findById(courseId).get().getEnrollments().size()) > 0) {
-            Course course = courseRepository.findById(courseId).get();
-            Student student = studentRepository.findById(studentId).get();
+            throw new RuntimeException("Student already registered for the course");
+        if (studentRepository.findById(studentId).get().getEnrollments().size()>5)
+            throw new RuntimeException("Student enrolment limit exceeded............");
+        Course course = courseRepository.findById(courseId).get();
+        Student student = studentRepository.findById(studentId).get();
+        if(!course.getPrerequisites().isEmpty()){
+            if (student.getSkills().isEmpty()||!student.getSkills().containsAll(course.getPrerequisites())){
+                throw new RuntimeException("Prerequisite doesn't met......."+"\n to enroll this course you have to complete:"+course.getPrerequisites());
+            }
+        }
+        if ((course.getCapacity() - course.getEnrollments().size()) > 0) {
             Enrollment e = new Enrollment();
             e.setStatus(Status.IN_PROGRESS);
             e.setCourse(course);
@@ -62,6 +70,7 @@ public class EnrollmentService {
             enrollment.setProgressPercentage(progressPercentage);
             if (progressPercentage==100){
                 enrollment.setStatus(Status.COMPLETED);
+                student.getSkills().add(course.getSkill());
                 CompletionRecord completionRecord=CompletionRecord.builder().studentEmail(student.getEmail()).studentName(student.getName()).courseName(course.getTitle()).build();
                 completionRecordRepository.save(completionRecord);
                 Badge badge = Badge.builder().name(course.getTitle() + ":Master").student(student).build();
@@ -92,7 +101,7 @@ public class EnrollmentService {
                 return "Student Progress Updated\n"+entityToDto(enrollment,badge);
             }
         }
-        return "No such enrollment record found";
+        throw new RuntimeException("No such enrollment record found");
     }
 
 
@@ -105,5 +114,23 @@ public class EnrollmentService {
     }
     public EnrollmentDto entityToDto(Enrollment enrollment,Badge badge) {
         return new EnrollmentDto(enrollment.getStudent().getName(), enrollment.getCourse().getTitle(), enrollment.getStatus(), enrollment.getProgressPercentage(),badge.getName());
+    }
+
+    public Object unenrollByEnrollmentId(long enrollmentId, long courseId) {
+            if(!enrollmentRepository.existsByEnrolmentIdAndCourseId(enrollmentId, courseId))
+                throw new RuntimeException("Enrollments not found");
+
+            Enrollment enrollment=enrollmentRepository.findById(enrollmentId).get();
+            enrollmentRepository.delete(enrollment);
+
+            return enrollment.getCourse().getTitle()+"Enrollement deleted successfully";
+    }
+
+    public List<EnrollmentDto> getEnrollmentList() {
+        return enrollmentRepository.findAll().stream().map(this::entityToDto).toList();
+    }
+
+    public EnrollmentDto getEnrollmentById(long id){
+        return entityToDto(enrollmentRepository.getById(id));
     }
 }

@@ -1,6 +1,6 @@
 package com.onlinecoursehub.impl.repository;
 
-import com.onlinecoursehub.impl.model.CompletionRecord;
+import com.onlinecoursehub.impl.utils.CompletionRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

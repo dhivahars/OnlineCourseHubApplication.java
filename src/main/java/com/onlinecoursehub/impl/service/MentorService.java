@@ -1,5 +1,6 @@
 package com.onlinecoursehub.impl.service;
 
+import com.onlinecoursehub.impl.dto.MentorDto;
 import com.onlinecoursehub.impl.model.Course;
 import com.onlinecoursehub.impl.model.Mentor;
 import com.onlinecoursehub.impl.repository.CourseRepository;
@@ -21,13 +22,15 @@ public class MentorService {
 
     public String addMentor(Mentor mentor) {
         if (mentorRepository.existsByEmail(mentor.getEmail()))
-            return "Mentor already Present";
+            throw new RuntimeException("Mentor already Present");
         mentorRepository.save(mentor);
         return "Mentor added successfully";
     }
 
-    public List<Mentor> listMentor() {
-        return mentorRepository.findAll();
+    public List<MentorDto> listMentor() {
+        if(mentorRepository.findAll().isEmpty())
+            throw new RuntimeException("No mentor found..........");
+        return mentorRepository.findAll().stream().map(this::entityToDto).toList();
     }
 
     public Optional<Mentor> showByName(String name) {
@@ -55,7 +58,10 @@ public class MentorService {
             mentorRepository.deleteById(id);
             return "Mentor Deleted Successfully";
         }
-        return "Mentor Not Found";
+        throw new RuntimeException("Mentor Not Found");
+    }
+    public MentorDto entityToDto(Mentor m){
+        return MentorDto.builder().name(m.getName()).email(m.getEmail()).build();
     }
 
 //    public String assignCourseById(long mentor_id, long course_id) {

@@ -2,7 +2,7 @@ package com.onlinecoursehub.impl.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.onlinecoursehub.impl.utils.Badge;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -12,9 +12,10 @@ import org.hibernate.annotations.CreationTimestamp;
 
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -56,4 +57,6 @@ public class Student{
     @ToString.Exclude
     private List<Badge> badges = new ArrayList<>();
 
+    @Column(name="skills")
+    private Set<String> Skills=new HashSet<>();
 }
