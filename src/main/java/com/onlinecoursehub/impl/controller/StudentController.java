@@ -29,8 +29,8 @@ public class StudentController {
     }
 
     @GetMapping("/search/id/{id}")
-     public ResponseEntity<StudentDto> getStudentById(@PathVariable long id) {
-        return ResponseEntity.ok(StudentService.entityToDto(studentService.getStudentById(id).get()));
+    public ResponseEntity<StudentDto> getStudentById(@PathVariable long id) {
+        return ResponseEntity.ok(studentService.entityToDto(studentService.getStudentById(id).get()));
     }
 
     @GetMapping("/search/name/{name}")
@@ -52,5 +52,4 @@ public class StudentController {
     public ResponseEntity<String> deleteStudentByName(@PathVariable String name) {
         return ResponseEntity.ok(studentService.deleteStudentByName(name));
     }
-
 }

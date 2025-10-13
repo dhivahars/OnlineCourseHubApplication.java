@@ -19,5 +19,5 @@ public class CourseDto {
     private String description;
     private int capacity;
     private Mentor mentorName;
-    private Set<String> prerequisiteTitles=new HashSet<>();
+    private Set<String> prerequisites=new HashSet<>();
 }
