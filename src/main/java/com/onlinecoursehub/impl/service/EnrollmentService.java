@@ -8,6 +8,7 @@ import com.onlinecoursehub.impl.utils.CompletionRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.onlinecoursehub.impl.model.Status;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class EnrollmentService {
     @Autowired
     private CompletionRecordRepository completionRecordRepository;
 
-
+    @Transactional
     public String enrollForCourse(Long studentId, Long courseId) {
         if (!studentRepository.existsById(studentId))
             throw new RuntimeException( "Student doesn't exists in the database");
@@ -54,6 +55,7 @@ public class EnrollmentService {
             studentRepository.save(student);
             courseRepository.save(course);
             Badge badge = Badge.builder().name(course.getTitle() + ":Begginer").student(student).build();
+//            badgeRepository.save(badge);
         }
         return "Course registration successfull........";
     }
@@ -64,6 +66,8 @@ public class EnrollmentService {
             if (enrollment.getStatus() == Status.COMPLETED) {
                 throw new RuntimeException("Cannot update completed enrollment");
             }
+            if(progressPercentage<enrollment.getProgressPercentage())
+                throw new RuntimeException("Error...............");
 
             Student student=enrollment.getStudent();
             Course course=enrollment.getCourse();

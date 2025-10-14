@@ -3,9 +3,12 @@ package com.onlinecoursehub.impl.service;
 import com.onlinecoursehub.impl.dto.StudentDto;
 import com.onlinecoursehub.impl.model.Enrollment;
 import com.onlinecoursehub.impl.model.Student;
+import com.onlinecoursehub.impl.repository.BadgeRepository;
 import com.onlinecoursehub.impl.repository.StudentRepository;
+import com.onlinecoursehub.impl.utils.Badge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,11 +46,13 @@ public class StudentService {
             student.setName(s.getName());
         if (s.getEmail() != null)
             student.setEmail(s.getEmail());
+        if(s.getSkills()!=null && !s.getSkills().isEmpty())
+            student.getSkills().addAll(s.getSkills());
 
         studentRepository.save(student);
         return "Student updated successfully";
     }
-
+    @Transactional
     public String deleteStudentById(long id) {
         if (studentRepository.existsById(id)) {
             studentRepository.deleteById(id);
@@ -56,7 +61,7 @@ public class StudentService {
 
         throw new RuntimeException("Student Not Found");
     }
-
+    @Transactional
     public String deleteStudentByName(String name) {
         if (studentRepository.existsByName(name)) {
             studentRepository.deleteByName(name);
@@ -70,5 +75,10 @@ public class StudentService {
         return new StudentDto(student.getName(), student.getEmail(), student.getEnrollments().stream().map(Enrollment::getCourse).map(a -> a.getTitle()).toList());
     }
 
+    public String studentBadges(long id) {
 
+        List<String> badge=studentRepository.getById(id).getBadges().stream().map(Badge::getName).toList();
+        return "Badges earned by "+studentRepository.getById(id).getName()+":\n"+
+                badge;
+    }
 }

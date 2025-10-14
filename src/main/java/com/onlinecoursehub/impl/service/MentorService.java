@@ -61,7 +61,8 @@ public class MentorService {
         throw new RuntimeException("Mentor Not Found");
     }
     public MentorDto entityToDto(Mentor m){
-        return MentorDto.builder().name(m.getName()).email(m.getEmail()).build();
+        return MentorDto.builder().name(m.getName()).email(m.getEmail()).id(m.getId())
+        .build();
     }
 
 //    public String assignCourseById(long mentor_id, long course_id) {
