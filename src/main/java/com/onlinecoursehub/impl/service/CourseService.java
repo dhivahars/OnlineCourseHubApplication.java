@@ -1,22 +1,20 @@
 package com.onlinecoursehub.impl.service;
 
 import com.onlinecoursehub.impl.dto.CourseDto;
+import com.onlinecoursehub.impl.dto.EnrollmentDto;
 import com.onlinecoursehub.impl.model.Course;
 import com.onlinecoursehub.impl.model.Mentor;
 import com.onlinecoursehub.impl.model.Enrollment;
 import com.onlinecoursehub.impl.model.Student;
 import com.onlinecoursehub.impl.repository.CourseRepository;
 import com.onlinecoursehub.impl.repository.MentorRepository;
+import com.onlinecoursehub.impl.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
-
 
 @Service
 public class CourseService {
@@ -24,6 +22,8 @@ public class CourseService {
     CourseRepository courseRepository;
     @Autowired
     MentorRepository mentorRepository;
+    @Autowired
+    StudentRepository studentRepository;
 
     public CourseDto addCourse(Course course){
         if(courseRepository.existsByTitle(course.getTitle())){
@@ -123,12 +123,38 @@ public class CourseService {
 
      public CourseDto entityToDto(Course course){
         CourseDto courseDto=new CourseDto();
+        courseDto.setId(course.getId());
         courseDto.setTitle(course.getTitle());
         courseDto.setDescription(course.getDescription());
         courseDto.setCapacity(course.getCapacity());
         courseDto.setMentorName(mentorRepository.findById(course.getMentor().getId()).get());
 //        Set<String> prerequisitesName=courseDto.getPrerequisiteTitles().addAll();
-        courseDto.setPrerequisiteTitles(course.getPrerequisites());
+        courseDto.setPrerequisites(course.getPrerequisites());
         return courseDto;
+    }
+    public  String studentPerCourse(long id) {
+        if(!courseRepository.existsById(id))
+            throw new RuntimeException("No course With Id"+id+"Exists");
+        if(courseRepository.findById(id).get().getEnrollments().isEmpty()||courseRepository.findById(id).get().getEnrollments()==null)
+            throw new RuntimeException("No records found.....");
+        Course course=courseRepository.getById(id);
+        List<String> students=courseRepository.getById(id).getEnrollments().stream().filter(a->a.getCourse().getId()==course.getId()).map(a->a.getStudent().getName()).toList();
+        long count=courseRepository.getById(id).getEnrollments().stream().filter(a->a.getCourse().getId()==course.getId()).count();
+        return "Course Name:"+course.getTitle()+
+                "\n Total number of students:"+count+
+                "\n Students List:"+students;
+    }
+
+
+    public String studentProgress(long id) {
+        if(!studentRepository.existsById(id))
+            throw new RuntimeException("Student doesn't exists...........");
+        if(studentRepository.getById(id).getEnrollments().isEmpty())
+            throw new RuntimeException("Student has no enrollments.........");
+
+        Student student=studentRepository.getById(id);
+        HashMap<String,Double> progress= (HashMap<String, Double>) studentRepository.getById(id).getEnrollments().stream().collect(Collectors.toMap(e->e.getCourse().getTitle(),Enrollment::getProgressPercentage));
+        return "Progress of "+studentRepository.getById(id).getName()+":\n"+
+                progress;
     }
 }
