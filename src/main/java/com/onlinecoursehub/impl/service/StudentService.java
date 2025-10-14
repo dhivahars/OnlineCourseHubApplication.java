@@ -18,7 +18,7 @@ public class StudentService {
     @Autowired
     StudentRepository studentRepository;
 
-    public Object addStudent(Student s) {
+    public StudentDto addStudent(Student s) {
         if (studentRepository.existsByEmail(s.getEmail())) {
             throw new RuntimeException("Mail already exists");
         }
