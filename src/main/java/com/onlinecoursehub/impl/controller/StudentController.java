@@ -19,7 +19,7 @@ public class StudentController {
     StudentService studentService;
 
     @PostMapping("/add")
-    public ResponseEntity<Object> addStudent(@RequestBody Student student) {
+    public ResponseEntity<StudentDto> addStudent(@RequestBody Student student) {
         return ResponseEntity.ok(studentService.addStudent(student));
     }
 
