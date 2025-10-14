@@ -8,6 +8,7 @@ import com.onlinecoursehub.impl.utils.CompletionRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.onlinecoursehub.impl.model.Status;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class EnrollmentService {
     @Autowired
     private CompletionRecordRepository completionRecordRepository;
 
-
+    @Transactional
     public String enrollForCourse(Long studentId, Long courseId) {
         if (!studentRepository.existsById(studentId))
             throw new RuntimeException( "Student doesn't exists in the database");

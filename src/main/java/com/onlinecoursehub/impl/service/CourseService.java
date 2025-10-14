@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 @Service
 public class CourseService {
     @Autowired
@@ -130,7 +129,7 @@ public class CourseService {
         courseDto.setCapacity(course.getCapacity());
         courseDto.setMentorName(mentorRepository.findById(course.getMentor().getId()).get());
 //        Set<String> prerequisitesName=courseDto.getPrerequisiteTitles().addAll();
-        courseDto.setPrerequisite(course.getPrerequisites());
+        courseDto.setPrerequisites(course.getPrerequisites());
         return courseDto;
     }
     public  String studentPerCourse(long id) {

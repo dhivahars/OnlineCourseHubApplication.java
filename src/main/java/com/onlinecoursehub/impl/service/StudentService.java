@@ -7,7 +7,6 @@ import com.onlinecoursehub.impl.repository.BadgeRepository;
 import com.onlinecoursehub.impl.repository.StudentRepository;
 import com.onlinecoursehub.impl.utils.Badge;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +17,6 @@ import java.util.Optional;
 public class StudentService {
     @Autowired
     StudentRepository studentRepository;
-    @Autowired
-    BadgeRepository badgeRepository;
 
     public Object addStudent(Student s) {
         if (studentRepository.existsByEmail(s.getEmail())) {
