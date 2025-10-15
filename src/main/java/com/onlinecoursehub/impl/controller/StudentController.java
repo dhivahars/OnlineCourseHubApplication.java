@@ -19,7 +19,7 @@ public class StudentController {
     StudentService studentService;
 
     @PostMapping("/add")
-    public ResponseEntity<Object> addStudent(@RequestBody Student student) {
+    public ResponseEntity<StudentDto> addStudent(@RequestBody Student student) {
         return ResponseEntity.ok(studentService.addStudent(student));
     }
 
@@ -29,7 +29,7 @@ public class StudentController {
     }
 
     @GetMapping("/search/id/{id}")
-     public ResponseEntity<StudentDto> getStudentById(@PathVariable long id) {
+    public ResponseEntity<StudentDto> getStudentById(@PathVariable long id) {
         return ResponseEntity.ok(studentService.entityToDto(studentService.getStudentById(id).get()));
     }
 
@@ -52,5 +52,4 @@ public class StudentController {
     public ResponseEntity<String> deleteStudentByName(@PathVariable String name) {
         return ResponseEntity.ok(studentService.deleteStudentByName(name));
     }
-
 }
