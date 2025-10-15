@@ -29,31 +29,29 @@ public class CourseService {
         if(courseRepository.existsByTitle(course.getTitle())){
             throw new RuntimeException("Course already exists with title: " + course.getTitle());
         }
+        Mentor mentor = mentorRepository.findById(course.getMentor().getId())
+                .orElseThrow(() -> new RuntimeException("Mentor not found with ID: " + course.getMentor().getId()));
+        if(mentorRepository.findById(course.getMentor().getId()).get().getCourseList().size()>=5)
+            throw new RuntimeException("Mentor is not available,choose another mentor to create course");
        return entityToDto(courseRepository.save(course));
-//        Set<Course> prerequisites = new HashSet<>();
-//        prerequisites=course.getPrerequisites();
-//        Course inputCourse = courseRepository.save(course);
-//
-//        if (prerequisites != null && !prerequisites.isEmpty()) {
-//            Set<Course> addingPrequisites = prerequisites.stream()
-//                    .map(c -> courseRepository.findById(c.getId()).get())
-//                    .collect(Collectors.toSet());
-//            inputCourse.setPrerequisites(addingPrequisites);
-//        }
-//
-//        return entityToDto(courseRepository.save(inputCourse));
     }
 
 
     public List<CourseDto> listCourse() {
+        if(courseRepository.findAll().isEmpty())
+            throw new RuntimeException("No records found...........");
         return courseRepository.findAll().stream().map(this::entityToDto).toList();
     }
 
     public Optional<CourseDto> showById(long id) {
+        if(!courseRepository.existsById(id))
+            throw new RuntimeException("No course with Id-"+id+" found");
         return Optional.ofNullable(entityToDto(courseRepository.findById(id).orElseThrow(()->new RuntimeException("Course not found"))));
     }
 
     public Optional<CourseDto> showByName(String name) {
+        if(!courseRepository.existsByTitle(name))
+            throw new RuntimeException("No course found..............");
         return Optional.ofNullable(entityToDto(Optional.ofNullable(courseRepository.findByTitle(name)).get()));
     }
 
@@ -111,7 +109,7 @@ public class CourseService {
         course.setMentor(mentor);
         return courseRepository.save(course);
     }
-    public Course assignMentorToCourse(Long courseId, Long mentorId) {
+    public Course modifyMentorToCourse(Long courseId, Long mentorId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found with ID: " + courseId));
 
@@ -119,7 +117,8 @@ public class CourseService {
                 .orElseThrow(() -> new RuntimeException("Mentor not found with ID: " + mentorId));
 
         course.setMentor(mentor);
-        return courseRepository.save(course);}
+        return courseRepository.save(course);
+    }
 
      public CourseDto entityToDto(Course course){
         CourseDto courseDto=new CourseDto();

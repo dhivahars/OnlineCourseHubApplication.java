@@ -35,6 +35,7 @@ public class CompletionRecordService {
                         .studentName(e.getStudent().getName())
                         .studentEmail(e.getStudent().getEmail())
                         .courseName(e.getCourse().getTitle())
+                        .completionDate(LocalDate.now())
                         .build())
                 .toList();
         Map<String, List<CompletionRecordDto>> groupByEmail = dtoList.stream()

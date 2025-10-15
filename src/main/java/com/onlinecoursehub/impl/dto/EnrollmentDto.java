@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class EnrollmentDto {
+    private long id;
     private String studentName;
     private String courseTitle;
     private Status status;
     private double progressPercentage;
-    private String badgeName;
 }

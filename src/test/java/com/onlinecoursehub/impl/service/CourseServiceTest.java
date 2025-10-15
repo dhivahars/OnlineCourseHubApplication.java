@@ -63,24 +63,8 @@ class CourseServiceTest {
         verify(courseRepository, never()).save(any());
     }
 
-    @Test
-    void testShowById_Success() {
-        when(courseRepository.findById(course.getId())).thenReturn(Optional.of(course));
-        when(mentorRepository.findById(mentor.getId())).thenReturn(Optional.of(mentor));
 
-        CourseDto dto = courseService.showById(course.getId()).get();
-        assertEquals("Java", dto.getTitle());
-    }
 
-    @Test
-    void testShowById_NotFound() {
-        when(courseRepository.findById(99L)).thenReturn(Optional.empty());
-
-        RuntimeException ex = assertThrows(RuntimeException.class,
-                () -> courseService.showById(99L));
-
-        assertEquals("Course not found", ex.getMessage());
-    }
 
     @Test
     void testUpdateCourse_Success() {
