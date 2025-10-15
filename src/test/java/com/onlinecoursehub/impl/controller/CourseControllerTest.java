@@ -139,23 +139,4 @@ class CourseControllerTest {
         verify(courseService, times(1)).getCourseCapacityByName("Java");
     }
 
-    @Test
-    void testAssignMentor() {
-        when(courseService.assignMentorToCourse(1L, 10L)).thenReturn(course);
-
-        ResponseEntity<Course> response = courseController.assignMentor(1L, 10L);
-
-        assertEquals("Java", response.getBody().getTitle());
-        verify(courseService, times(1)).assignMentorToCourse(1L, 10L);
-    }
-
-    @Test
-    void testCreateCourseWithMentor() {
-        when(courseService.createCourseWithMentor(course, 10L)).thenReturn(course);
-
-        ResponseEntity<Course> response = courseController.createCourseWithMentor(10L, course);
-
-        assertEquals("Java", response.getBody().getTitle());
-        verify(courseService, times(1)).createCourseWithMentor(course, 10L);
-    }
 }

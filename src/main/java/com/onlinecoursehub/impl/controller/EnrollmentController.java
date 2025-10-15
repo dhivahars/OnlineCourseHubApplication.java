@@ -20,6 +20,10 @@ public class EnrollmentController {
     public ResponseEntity<String> addStudent(@RequestParam Long studentId, @RequestParam Long courseId) {
         return ResponseEntity.ok(enrollmentService.enrollForCourse(studentId, courseId));
     }
+    @GetMapping("/list")
+    public ResponseEntity<String> enrollmentList(){
+        return ResponseEntity.ok("Enrollment Lists:\n"+enrollmentService.getEnrollmentList());
+    }
 
     @PatchMapping("/update/progress/id")
     public Object updateProgressByEnrollmentId(@RequestParam long enrollmentId,
@@ -30,10 +34,6 @@ public class EnrollmentController {
     public Object unenrollByEnrollmentId(@RequestParam long enrollmentId,
                                          @RequestParam long courseId){
         return enrollmentService.unenrollByEnrollmentId(enrollmentId, courseId);
-    }
-    @GetMapping("/list")
-    public List<EnrollmentDto> getEnrolmentList(){
-        return enrollmentService.getEnrollmentList();
     }
     @GetMapping("/search/id/{id}")
     public EnrollmentDto getEnrollmemtById(@PathVariable long id){

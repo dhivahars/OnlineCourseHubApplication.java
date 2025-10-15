@@ -40,7 +40,7 @@ public class StudentService {
     }
 
     public String updateStudent(long id, Student s) {
-        Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found with id " + s.getId()));
+        Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found with id " + id));
 
         if (s.getName() != null)
             student.setName(s.getName());
@@ -72,12 +72,15 @@ public class StudentService {
     }
 
     public StudentDto entityToDto(Student student) {
-        return new StudentDto(student.getName(), student.getEmail(), student.getEnrollments().stream().map(Enrollment::getCourse).map(a -> a.getTitle()).toList());
+        return new StudentDto(student.getId(),student.getName(), student.getEmail(), student.getEnrollments().stream().map(Enrollment::getCourse).map(a -> a.getTitle()).toList());
     }
 
     public String studentBadges(long id) {
-
+        if (!studentRepository.existsById(id))
+            throw new RuntimeException("Student not found..............");
         List<String> badge=studentRepository.getById(id).getBadges().stream().map(Badge::getName).toList();
+        if (badge.isEmpty())
+            throw new RuntimeException("Student doesn't earned any badges..........");
         return "Badges earned by "+studentRepository.getById(id).getName()+":\n"+
                 badge;
     }
