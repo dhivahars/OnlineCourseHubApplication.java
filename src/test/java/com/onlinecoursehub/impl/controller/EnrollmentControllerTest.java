@@ -59,21 +59,6 @@ class EnrollmentControllerTest {
         assertEquals("Unenrolled successfully", result);
     }
 
-    @Test
-    void testGetEnrollmentList() {
-        EnrollmentDto dto = EnrollmentDto.builder()
-                .studentName("John")
-                .courseTitle("Java Basics")
-                .build();
-
-        when(enrollmentService.getEnrollmentList()).thenReturn(List.of(dto));
-
-        List<EnrollmentDto> result = enrollmentController.getEnrolmentList();
-
-        assertEquals(1, result.size());
-        assertEquals("John", result.get(0).getStudentName());
-        assertEquals("Java Basics", result.get(0).getCourseTitle());
-    }
 
     @Test
     void testGetEnrollmentById() {

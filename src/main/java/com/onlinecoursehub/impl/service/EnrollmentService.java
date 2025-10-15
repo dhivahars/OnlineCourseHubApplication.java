@@ -90,7 +90,7 @@ public class EnrollmentService {
 
                 return "Student Progress Updated\n"+entityToDto(enrollmentRepository.save(enrollment),badge);
             }
-            else if (progressPercentage>=50){
+            else if (progressPercentage<=50||progressPercentage>=50){
                 enrollment.setStatus(Status.HALF_WAY);
                 Badge badge = Badge.builder().name(course.getTitle() + ":Intermmediate").student(student).build();
                 if (badgeRepository.existsByName(badge.getName())){
@@ -112,12 +112,14 @@ public class EnrollmentService {
     public EnrollmentDto entityToDto(Enrollment enrollment) {
         return new EnrollmentDto().builder()
                 .courseTitle(enrollment.getCourse().getTitle())
+                .id(enrollment.getCourse().getId())
                 .studentName(enrollment.getStudent().getName())
                 .status(enrollment.getStatus())
+                .progressPercentage(enrollment.getProgressPercentage())
                 .build();
     }
     public EnrollmentDto entityToDto(Enrollment enrollment,Badge badge) {
-        return new EnrollmentDto(enrollment.getStudent().getName(), enrollment.getCourse().getTitle(), enrollment.getStatus(), enrollment.getProgressPercentage(),badge.getName());
+        return new EnrollmentDto(enrollment.getId(),enrollment.getStudent().getName(), enrollment.getCourse().getTitle(), enrollment.getStatus(), enrollment.getProgressPercentage());
     }
 
     public Object unenrollByEnrollmentId(long enrollmentId, long courseId) {
@@ -131,6 +133,8 @@ public class EnrollmentService {
     }
 
     public List<EnrollmentDto> getEnrollmentList() {
+        if(enrollmentRepository.findAll().isEmpty())
+            throw new RuntimeException("No records found......");
         return enrollmentRepository.findAll().stream().map(this::entityToDto).toList();
     }
 
