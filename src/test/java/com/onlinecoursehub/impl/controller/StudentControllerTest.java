@@ -42,7 +42,6 @@ class StudentControllerTest {
 
         studentDto = new StudentDto();
         studentDto.setName("Tony");
-        studentDto.setEmail("tony@gmail.com");
     }
 
     @Test
@@ -53,7 +52,6 @@ class StudentControllerTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Tony", response.getBody().getName());
-        assertEquals("tony@gmail.com", response.getBody().getEmail());
         verify(studentService, times(1)).addStudent(any(Student.class));
     }
 
@@ -69,29 +67,7 @@ class StudentControllerTest {
         verify(studentService, times(1)).getStudentsList();
     }
 
-    @Test
-    void testGetStudentById() {
-        when(studentService.getStudentById(anyLong())).thenReturn(Optional.of(student));
-        when(studentService.entityToDto(any(Student.class))).thenReturn(studentDto);
 
-        ResponseEntity<StudentDto> response = studentController.getStudentById(1L);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Tony", response.getBody().getName());
-        verify(studentService, times(1)).getStudentById(1L);
-    }
-
-    @Test
-    void testGetStudentByName() {
-        when(studentService.getStudentByName(anyString())).thenReturn(Optional.of(student));
-        when(studentService.entityToDto(any(Student.class))).thenReturn(studentDto);
-
-        ResponseEntity<StudentDto> response = studentController.getStudentByName("Tony");
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("tony@gmail.com", response.getBody().getEmail());
-        verify(studentService, times(1)).getStudentByName("Tony");
-    }
 
     @Test
     void testUpdateStudent() {

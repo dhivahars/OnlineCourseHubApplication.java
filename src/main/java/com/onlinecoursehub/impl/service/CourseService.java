@@ -49,11 +49,6 @@ public class CourseService {
         return Optional.ofNullable(entityToDto(courseRepository.findById(id).orElseThrow(()->new RuntimeException("Course not found"))));
     }
 
-    public Optional<CourseDto> showByName(String name) {
-        if(!courseRepository.existsByTitle(name))
-            throw new RuntimeException("No course found..............");
-        return Optional.ofNullable(entityToDto(Optional.ofNullable(courseRepository.findByTitle(name)).get()));
-    }
 
     public String updateCourse(long id, Course c) {
         Course existing = courseRepository.findById(id)
@@ -76,13 +71,6 @@ public class CourseService {
         throw new RuntimeException( "Course Not Found");
     }
 
-    public String deleteCourseByTitle(String name) {
-        if (courseRepository.findByTitle(name).getTitle().equalsIgnoreCase(name)) {
-            courseRepository.deleteByTitle(name);
-            return "Course Deleted Successfully";
-        }
-        throw new RuntimeException( "Course Not Found");
-    }
 
     public String getCourseCapacityById(long courseId) {
         Course course = courseRepository.findById(courseId)
@@ -93,15 +81,6 @@ public class CourseService {
                 ", Available: " + availableSeats;
     }
 
-    public String getCourseCapacityByName(String name) {
-        Course course = courseRepository.findByTitle(name);
-        if (course == null) {
-            throw new RuntimeException("Course not found with name: " + name);
-        }
-        return "Total Seats: " + course.getCapacity() +
-                ", Enrolled Students: " + course.getEnrollments().size() +
-                ", Available Seats: " + (course.getCapacity() - course.getEnrollments().size());
-    }
     public Course createCourseWithMentor(Course course, Long mentorId) {
         Mentor mentor = mentorRepository.findById(mentorId)
                 .orElseThrow(() -> new RuntimeException("Mentor not found with ID: " + mentorId));
@@ -127,7 +106,6 @@ public class CourseService {
         courseDto.setDescription(course.getDescription());
         courseDto.setCapacity(course.getCapacity());
         courseDto.setMentorName(mentorRepository.findById(course.getMentor().getId()).get());
-//        Set<String> prerequisitesName=courseDto.getPrerequisiteTitles().addAll();
         courseDto.setPrerequisites(course.getPrerequisites());
         return courseDto;
     }

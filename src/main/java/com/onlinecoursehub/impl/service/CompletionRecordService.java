@@ -38,23 +38,9 @@ public class CompletionRecordService {
                         .completionDate(LocalDate.now())
                         .build())
                 .toList();
-        Map<String, List<CompletionRecordDto>> groupByEmail = dtoList.stream()
-                .collect(Collectors.groupingBy(CompletionRecordDto::getStudentEmail));
+        Map<String, List<CompletionRecordDto>> groupByCourseName = dtoList.stream()
+                .collect(Collectors.groupingBy(CompletionRecordDto::getCourseName));
 
-        return groupByEmail;
+        return groupByCourseName;
     }}
 
-//    public HashMap<String, List<CompletionRecordDto>> getCompletedCourseHistory() {
-//        return entityToDto(completionRecordRepository.findAll());
-//    }
-//
-//    public HashMap<String, List<CompletionRecordDto>> entityToDto(List<CompletionRecord> completionRecord) {
-//        List<Enrollment> completedStudentsList = enrollmentRepository.findByStatus(Status.COMPLETED);
-//        List<CompletionRecordDto> list = completedStudentsList.stream().map(a -> {
-//            return CompletionRecordDto.builder().studentName(a.getStudent().getName()).studentEmail(a.getStudent().getEmail()).courseName(a.getCourse().getTitle()).build();
-//        }).toList();
-//        HashMap<String, List<CompletionRecordDto>> groupByname = (HashMap<String, List<CompletionRecordDto>>) list.stream()
-//                                                                                                                    .collect(Collectors.groupingBy(CompletionRecordDto::getStudentEmail, Collectors.mapping(a -> CompletionRecordDto.builder().studentName(a.getStudentName()).courseName(a.getCourseName()).completionDate(a.getCompletionDate()).build(), Collectors.toList())));
-//        return groupByname;
-//    }
-//}

@@ -32,11 +32,6 @@ public class MentorService {
             throw new RuntimeException("No mentor found..........");
         return mentorRepository.findAll().stream().map(this::entityToDto).toList();
     }
-
-    public Optional<Mentor> showByName(String name) {
-        return Optional.ofNullable((Mentor) mentorRepository.findByName(name).orElseThrow(() -> new RuntimeException("Mentor not found With Name:" + name)));
-    }
-
     public Optional<Mentor> showById(long id) {
         return Optional.ofNullable((Mentor) mentorRepository.findById(id).orElseThrow(() -> new RuntimeException("Mentor not found With Id:" + id)));
     }

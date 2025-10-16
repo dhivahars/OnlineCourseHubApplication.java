@@ -4,9 +4,11 @@ import com.onlinecoursehub.impl.dto.EnrollmentDto;
 import com.onlinecoursehub.impl.service.EnrollmentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.ResponseEntity;
 
@@ -16,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-
+@ExtendWith(MockitoExtension.class)
 class EnrollmentControllerTest {
 
     @Mock
@@ -25,10 +27,10 @@ class EnrollmentControllerTest {
     @InjectMocks
     private EnrollmentController enrollmentController;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+//    @BeforeEach
+//    void setUp() {
+//        MockitoAnnotations.openMocks(this);
+//    }
 
     @Test
     void testAddStudent() {

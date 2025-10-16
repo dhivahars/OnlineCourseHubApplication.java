@@ -80,24 +80,8 @@ class MentorServiceTest {
         verify(mentorRepository).findAll();
     }
 
-    @Test
-    void testShowByName_Success() {
-        when(mentorRepository.findByName("Leo")).thenReturn(Optional.of(mentor));
 
-        Optional<Mentor> result = mentorService.showByName("Leo");
 
-        assertTrue(result.isPresent());
-        assertEquals("Leo", result.get().getName());
-        verify(mentorRepository, times(1)).findByName("Leo");
-    }
-
-    @Test
-    void testShowByName_NotFound() {
-        when(mentorRepository.findByName("Unknown")).thenReturn(Optional.empty());
-
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> mentorService.showByName("Unknown"));
-        assertTrue(ex.getMessage().contains("Mentor not found With Name"));
-    }
 
     @Test
     void testShowById_Success() {

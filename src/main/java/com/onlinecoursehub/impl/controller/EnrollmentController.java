@@ -20,11 +20,6 @@ public class EnrollmentController {
     public ResponseEntity<String> addStudent(@RequestParam Long studentId, @RequestParam Long courseId) {
         return ResponseEntity.ok(enrollmentService.enrollForCourse(studentId, courseId));
     }
-    @GetMapping("/list")
-    public ResponseEntity<String> enrollmentList(){
-        return ResponseEntity.ok("Enrollment Lists:\n"+enrollmentService.getEnrollmentList());
-    }
-
     @PatchMapping("/update/progress/id")
     public Object updateProgressByEnrollmentId(@RequestParam long enrollmentId,
                                                        @RequestParam double progressPercentage) {
