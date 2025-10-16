@@ -25,11 +25,13 @@ public class Enrollment {
 
     @ManyToOne
     @JoinColumn(name = "student_id",nullable = false)
+    @JsonIgnore
     @ToString.Exclude
     private Student student;
 
      @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
+     @JsonIgnore
      @ToString.Exclude
     private Course course;
 

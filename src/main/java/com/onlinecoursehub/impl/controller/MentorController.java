@@ -24,10 +24,6 @@ public class MentorController {
     public ResponseEntity<List<MentorDto>> ShowMentorList(){
         return new ResponseEntity<>(mentorService.listMentor(),HttpStatus.CREATED);
     }
-    @GetMapping("/search/name/{name}")
-    public  ResponseEntity<Mentor> listByName(@PathVariable String name){
-        return new ResponseEntity<>(mentorService.showByName(name).get(),HttpStatus.CREATED);
-    }
     @GetMapping("/search/id/{id}")
     public  ResponseEntity<Mentor> listById(@PathVariable long id){
         return new ResponseEntity<>(mentorService.showById(id).get(),HttpStatus.CREATED);

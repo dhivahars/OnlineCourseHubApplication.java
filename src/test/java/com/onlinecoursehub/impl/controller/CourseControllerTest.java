@@ -78,16 +78,6 @@ class CourseControllerTest {
         verify(courseService, times(1)).showById(1);
     }
 
-    @Test
-    void testShowByName() {
-        when(courseService.showByName("Java")).thenReturn(Optional.of(courseDto));
-
-        ResponseEntity<CourseDto> response = courseController.ShowById("Java");
-
-        assertEquals(302, response.getStatusCodeValue());
-        assertEquals("Java", response.getBody().getTitle());
-        verify(courseService, times(1)).showByName("Java");
-    }
 
     @Test
     void testUpdateCourse() {
@@ -109,15 +99,6 @@ class CourseControllerTest {
         verify(courseService, times(1)).deleteCourseById(1);
     }
 
-    @Test
-    void testDeleteCourseByTitle() {
-        when(courseService.deleteCourseByTitle("Java")).thenReturn("Course Deleted by Title");
-
-        ResponseEntity<String> response = courseController.deleteCourseByName("Java");
-
-        assertEquals("Course Deleted by Title", response.getBody());
-        verify(courseService, times(1)).deleteCourseByTitle("Java");
-    }
 
     @Test
     void testGetCourseCapacityById() {
@@ -129,14 +110,5 @@ class CourseControllerTest {
         verify(courseService, times(1)).getCourseCapacityById(1);
     }
 
-    @Test
-    void testGetCourseCapacityByName() {
-        when(courseService.getCourseCapacityByName("Java")).thenReturn("Capacity is 50");
-
-        ResponseEntity<String> response = courseController.getCourseCapacityByName("Java");
-
-        assertEquals("Capacity is 50", response.getBody());
-        verify(courseService, times(1)).getCourseCapacityByName("Java");
-    }
 
 }

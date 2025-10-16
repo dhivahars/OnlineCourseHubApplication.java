@@ -1,11 +1,9 @@
 package com.onlinecoursehub.impl.service;
 
-import com.onlinecoursehub.impl.dto.CourseDto;
 import com.onlinecoursehub.impl.model.Course;
 import com.onlinecoursehub.impl.model.Mentor;
 import com.onlinecoursehub.impl.repository.CourseRepository;
 import com.onlinecoursehub.impl.repository.MentorRepository;
-import com.onlinecoursehub.impl.repository.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

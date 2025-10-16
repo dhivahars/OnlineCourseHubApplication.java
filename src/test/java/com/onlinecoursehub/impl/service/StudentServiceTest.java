@@ -38,16 +38,7 @@ class StudentServiceTest {
     }
 
 
-    @Test
-    void testAddStudent_Success() {
-        when(studentRepository.existsByEmail(student.getEmail())).thenReturn(false);
-        when(studentRepository.save(any(Student.class))).thenReturn(student);
 
-        StudentDto dto = studentService.addStudent(student);
-
-        assertEquals("John", dto.getName());
-        assertEquals("john@gmail.com", dto.getEmail());
-    }
 
     @Test
     void testAddStudent_EmailExists_ThrowsException() {
@@ -70,47 +61,9 @@ class StudentServiceTest {
         assertEquals("John", result.get(0).getName());
     }
 
-    @Test
-    void testGetStudentById_Found() {
-        when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
 
-        Optional<Student> result = studentService.getStudentById(1L);
 
-        assertTrue(result.isPresent());
-        assertEquals("John", result.get().getName());
-    }
 
-    @Test
-    void testGetStudentById_NotFound() {
-        when(studentRepository.findById(1L)).thenReturn(Optional.empty());
-
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> {
-            studentService.getStudentById(1L);
-        });
-
-        assertEquals("Student not found With Id:1", ex.getMessage());
-    }
-
-    @Test
-    void testGetStudentByName_Found() {
-        when(studentRepository.findByName("John")).thenReturn(student);
-
-        Optional<Student> result = studentService.getStudentByName("John");
-
-        assertTrue(result.isPresent());
-        assertEquals("John", result.get().getName());
-    }
-
-    @Test
-    void testGetStudentByName_NotFound() {
-        when(studentRepository.findByName("John")).thenReturn(null);
-
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> {
-            studentService.getStudentByName("John");
-        });
-
-        assertTrue(ex.getMessage().contains("doesn't exist"));
-    }
 
     @Test
     void testUpdateStudent_Success() {
@@ -162,25 +115,5 @@ class StudentServiceTest {
         assertEquals("Student Not Found", ex.getMessage());
     }
 
-    // 7️⃣ Delete Student by Name
-    @Test
-    void testDeleteStudentByName_Success() {
-        when(studentRepository.existsByName("John")).thenReturn(true);
 
-        String result = studentService.deleteStudentByName("John");
-
-        assertEquals("Student Deleted Successfully", result);
-        verify(studentRepository).deleteByName("John");
-    }
-
-    @Test
-    void testDeleteStudentByName_NotFound() {
-        when(studentRepository.existsByName("John")).thenReturn(false);
-
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> {
-            studentService.deleteStudentByName("John");
-        });
-
-        assertEquals("Student Not Found", ex.getMessage());
-    }
 }

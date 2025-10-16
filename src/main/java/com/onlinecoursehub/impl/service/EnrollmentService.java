@@ -33,12 +33,16 @@ public class EnrollmentService {
             throw new RuntimeException( "Student doesn't exists in the database");
         if (!courseRepository.existsById(courseId))
            throw new RuntimeException("course doesn't available in our platform");
-        if (studentRepository.findById(studentId).get().getEnrollments().contains(courseId) || courseRepository.findById(courseId).get().getEnrollments().contains(studentId))
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+        if (student.getEnrollments().stream().anyMatch(enrollment -> enrollment.getCourse().getId()==course.getId())) {
             throw new RuntimeException("Student already registered for the course");
+        }
         if (studentRepository.findById(studentId).get().getEnrollments().size()>5)
             throw new RuntimeException("Student enrolment limit exceeded............");
-        Course course = courseRepository.findById(courseId).get();
-        Student student = studentRepository.findById(studentId).get();
         if(!course.getPrerequisites().isEmpty()){
             if (student.getSkills().isEmpty()||!student.getSkills().containsAll(course.getPrerequisites())){
                 throw new RuntimeException("Prerequisite doesn't met......."+"\n to enroll this course you have to complete:"+course.getPrerequisites());
@@ -46,6 +50,7 @@ public class EnrollmentService {
         }
         if ((course.getCapacity() - course.getEnrollments().size()) > 0) {
             Enrollment e = new Enrollment();
+            Badge badge = Badge.builder().name(course.getTitle() + ":Begginer").student(student).build();
             e.setStatus(Status.IN_PROGRESS);
             e.setCourse(course);
             e.setStudent(student);
@@ -54,12 +59,10 @@ public class EnrollmentService {
             enrollmentRepository.save(e);
             studentRepository.save(student);
             courseRepository.save(course);
-            Badge badge = Badge.builder().name(course.getTitle() + ":Begginer").student(student).build();
-//            badgeRepository.save(badge);
+            badgeRepository.save(badge);
         }
         return "Course registration successfull........";
     }
-
     public Object updateProgressByEnrollmentId(long enrollmentId, double progressPercentage) {
         if (enrollmentRepository.existsById(enrollmentId)) {
             Enrollment enrollment=enrollmentRepository.findById(enrollmentId).get();
@@ -89,8 +92,12 @@ public class EnrollmentService {
                 courseRepository.save(course);
 
                 return "Student Progress Updated\n"+entityToDto(enrollmentRepository.save(enrollment),badge);
-            }
-            else if (progressPercentage<=50||progressPercentage>=50){
+            } else if (progressPercentage<=50) {
+                studentRepository.save(student);
+                courseRepository.save(course);
+                enrollmentRepository.save(enrollment);
+                return "Student Progress Updated\n"+entityToDto(enrollment);
+            } else if (progressPercentage>=50){
                 enrollment.setStatus(Status.HALF_WAY);
                 Badge badge = Badge.builder().name(course.getTitle() + ":Intermmediate").student(student).build();
                 if (badgeRepository.existsByName(badge.getName())){
@@ -132,11 +139,6 @@ public class EnrollmentService {
             return enrollment.getCourse().getTitle()+"Enrollement deleted successfully";
     }
 
-    public List<EnrollmentDto> getEnrollmentList() {
-        if(enrollmentRepository.findAll().isEmpty())
-            throw new RuntimeException("No records found......");
-        return enrollmentRepository.findAll().stream().map(this::entityToDto).toList();
-    }
 
     public EnrollmentDto getEnrollmentById(long id){
         return entityToDto(enrollmentRepository.getById(id));
