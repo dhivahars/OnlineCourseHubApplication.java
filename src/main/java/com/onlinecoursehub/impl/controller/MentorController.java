@@ -24,15 +24,15 @@ public class MentorController {
     public ResponseEntity<List<MentorDto>> ShowMentorList(){
         return new ResponseEntity<>(mentorService.listMentor(),HttpStatus.CREATED);
     }
-    @GetMapping("/search/id/{id}")
+    @GetMapping("/search/{id}")
     public  ResponseEntity<Mentor> listById(@PathVariable long id){
         return new ResponseEntity<>(mentorService.showById(id).get(),HttpStatus.CREATED);
     }
-    @PatchMapping("/update/id/{id}")
+    @PatchMapping("/update/{id}")
     public ResponseEntity<String> updateMentor(@PathVariable long id,@RequestBody Mentor m){
         return ResponseEntity.ok(mentorService.updateMentor(id,m));
     }
-    @DeleteMapping("/delete/id/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteMentorById(@PathVariable long id){
         return ResponseEntity.ok(mentorService.deleteMentorById(id));
     }
