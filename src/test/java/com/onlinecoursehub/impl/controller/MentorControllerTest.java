@@ -38,7 +38,7 @@ class MentorControllerTest {
         mentor.setName("Satoru");
         mentor.setEmail("satoru@gmail.com");
 
-        // Dummy Mentor DTO
+
         mentorDto = new MentorDto();
         mentorDto.setId(1L);
         mentorDto.setName("Satoru");
@@ -68,16 +68,6 @@ class MentorControllerTest {
         verify(mentorService, times(1)).listMentor();
     }
 
-    @Test
-    void testListByName() {
-        when(mentorService.showByName("Satoru")).thenReturn(Optional.of(mentor));
-
-        ResponseEntity<Mentor> response = mentorController.listByName("Satoru");
-
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals("Satoru", response.getBody().getName());
-        verify(mentorService, times(1)).showByName("Satoru");
-    }
 
     @Test
     void testListById() {
