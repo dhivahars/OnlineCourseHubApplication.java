@@ -30,7 +30,7 @@ public class EnrollmentController {
                                          @RequestParam long courseId){
         return enrollmentService.unenrollByEnrollmentId(enrollmentId, courseId);
     }
-    @GetMapping("/search/id/{id}")
+    @GetMapping("/search/{id}")
     public EnrollmentDto getEnrollmemtById(@PathVariable long id){
         return enrollmentService.getEnrollmentById(id);
     }
