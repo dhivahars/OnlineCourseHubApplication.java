@@ -50,7 +50,7 @@ public class CourseService {
     }
 
 
-    public String updateCourse(long id, Course c) {
+    public CourseDto updateCourse(long id, Course c) {
         Course existing = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found with id " + c.getId()));
         if(c.getTitle() != null)
@@ -58,8 +58,8 @@ public class CourseService {
         if(c.getDescription() != null)
             existing.setDescription(c.getDescription());
 
-        courseRepository.save(existing);
-        return "Course updated successfully";
+
+        return entityToDto(courseRepository.save(existing));
     }
 
 

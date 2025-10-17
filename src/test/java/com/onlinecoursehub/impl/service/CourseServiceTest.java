@@ -1,5 +1,6 @@
 package com.onlinecoursehub.impl.service;
 
+import com.onlinecoursehub.impl.dto.CourseDto;
 import com.onlinecoursehub.impl.model.Course;
 import com.onlinecoursehub.impl.model.Mentor;
 import com.onlinecoursehub.impl.repository.CourseRepository;
@@ -74,9 +75,9 @@ class CourseServiceTest {
         when(courseRepository.findById(1L)).thenReturn(Optional.of(course));
         when(courseRepository.save(any(Course.class))).thenReturn(course);
 
-        String result = courseService.updateCourse(1L, updatedCourse);
+        CourseDto result = courseService.updateCourse(1L, updatedCourse);
 
-        assertEquals("Course updated successfully", result);
+        assertEquals("Java", result.getTitle());
         verify(courseRepository, times(1)).save(any(Course.class));
     }
 
