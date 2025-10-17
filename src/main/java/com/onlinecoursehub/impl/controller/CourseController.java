@@ -47,6 +47,7 @@ public class CourseController {
             return ResponseEntity.ok(courseService.deleteCourseByTitle(name));
         }
         @GetMapping("/capacity/id/{id}")
+        //@GetMapping("/capacity/{id}{name}")
         public ResponseEntity<String> getCourseCapacityById(@PathVariable long id) {
             return ResponseEntity.ok(courseService.getCourseCapacityById(id));
         }
