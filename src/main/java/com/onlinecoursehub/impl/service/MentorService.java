@@ -20,11 +20,10 @@ public class MentorService {
     @Autowired
     CourseRepository courseRepository;
 
-    public String addMentor(Mentor mentor) {
+    public MentorDto addMentor(Mentor mentor) {
         if (mentorRepository.existsByEmail(mentor.getEmail()))
             throw new RuntimeException("Mentor already Present");
-        mentorRepository.save(mentor);
-        return "Mentor added successfully";
+        return entityToDto(mentorRepository.save(mentor));
     }
 
     public List<MentorDto> listMentor() {
@@ -59,17 +58,4 @@ public class MentorService {
         return MentorDto.builder().name(m.getName()).email(m.getEmail()).id(m.getId())
         .build();
     }
-
-//    public String assignCourseById(long mentor_id, long course_id) {
-//       Mentor mentor= mentorRepository.findById(mentor_id).get();
-//       Course course=courseRepository.findById(course_id).get();
-//        if(course.getMentor() == null){
-//       mentor.getCourseList().add(course);
-//       course.setMentor(mentor);
-//       courseRepository.save(course);
-//       mentorRepository.save(mentor);
-//       return "Assigned course for mentor successfully";
-//        }
-//        return "course already has a mentor";
-//    }
 }

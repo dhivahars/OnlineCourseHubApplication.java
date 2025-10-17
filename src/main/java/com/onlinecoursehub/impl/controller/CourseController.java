@@ -25,7 +25,7 @@ public class CourseController {
         public ResponseEntity<List<CourseDto>> showCourse(){
             return new ResponseEntity<>(courseService.listCourse(),HttpStatus.FOUND);
         }
-        @GetMapping("/search/id}")
+        @GetMapping("/search/{id}")
         public ResponseEntity<CourseDto> ShowById(@PathVariable long id){
             return new ResponseEntity<>(courseService.showById(id).get(),HttpStatus.FOUND);
         }

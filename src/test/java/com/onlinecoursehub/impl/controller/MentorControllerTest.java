@@ -47,9 +47,9 @@ class MentorControllerTest {
 
     @Test
     void testCreateMentor() {
-        when(mentorService.addMentor(mentor)).thenReturn("Mentor Created");
+        when(mentorService.addMentor(mentor)).thenReturn(mentorDto);
 
-        ResponseEntity<String> response = mentorController.createMentor(mentor);
+        ResponseEntity<MentorDto> response = mentorController.createMentor(mentor);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals("Mentor Created", response.getBody());

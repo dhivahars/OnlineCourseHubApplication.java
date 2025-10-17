@@ -17,7 +17,7 @@ public class MentorController {
     @Autowired
     MentorService mentorService;
     @PostMapping("/create")
-    public ResponseEntity<String> createMentor(@RequestBody Mentor mentor){
+    public ResponseEntity<MentorDto> createMentor(@RequestBody Mentor mentor){
         return new ResponseEntity<>(mentorService.addMentor(mentor), HttpStatus.CREATED);
     }
     @GetMapping("/list")

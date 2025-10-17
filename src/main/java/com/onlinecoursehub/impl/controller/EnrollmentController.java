@@ -20,12 +20,12 @@ public class EnrollmentController {
     public ResponseEntity<String> addStudent(@RequestParam Long studentId, @RequestParam Long courseId) {
         return ResponseEntity.ok(enrollmentService.enrollForCourse(studentId, courseId));
     }
-    @PatchMapping("/update/progress/id")
+    @PatchMapping("/update/progress")
     public Object updateProgressByEnrollmentId(@RequestParam long enrollmentId,
                                                        @RequestParam double progressPercentage) {
         return enrollmentService.updateProgressByEnrollmentId(enrollmentId, progressPercentage);
     }
-    @DeleteMapping("/unenroll/id")
+    @DeleteMapping("/unenroll")
     public Object unenrollByEnrollmentId(@RequestParam long enrollmentId,
                                          @RequestParam long courseId){
         return enrollmentService.unenrollByEnrollmentId(enrollmentId, courseId);
