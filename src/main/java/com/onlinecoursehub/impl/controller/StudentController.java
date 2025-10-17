@@ -26,11 +26,11 @@ public class StudentController {
     public ResponseEntity<List<StudentDto>> studentsList() {
         return ResponseEntity.ok(studentService.getStudentsList());
     }
-    @PatchMapping("/update/id/{id}")
+    @PatchMapping("/update/{id}")
     public ResponseEntity<String> updateStudent(@PathVariable long id, @RequestBody Student s) {
         return ResponseEntity.ok(studentService.updateStudent(id, s));
     }
-    @DeleteMapping("/delete/id/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteStudentById(@PathVariable long id) {
         return ResponseEntity.ok(studentService.deleteStudentById(id));
     }

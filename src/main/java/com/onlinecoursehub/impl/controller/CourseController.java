@@ -25,7 +25,7 @@ public class CourseController {
         public ResponseEntity<List<CourseDto>> showCourse(){
             return new ResponseEntity<>(courseService.listCourse(),HttpStatus.FOUND);
         }
-        @GetMapping("/search/id/{id}")
+        @GetMapping("/search/id}")
         public ResponseEntity<CourseDto> ShowById(@PathVariable long id){
             return new ResponseEntity<>(courseService.showById(id).get(),HttpStatus.FOUND);
         }
@@ -33,11 +33,11 @@ public class CourseController {
         public ResponseEntity<CourseDto> updateCourse(@PathVariable long id,@RequestBody Course c){
             return ResponseEntity.ok(courseService.updateCourse(id,c));
         }
-        @DeleteMapping("/delete/id/{id}")
+        @DeleteMapping("/delete/{id}")
         public ResponseEntity<String> deleteCourseById(@PathVariable long id){
             return ResponseEntity.ok(courseService.deleteCourseById(id));
         }
-        @GetMapping("/capacity/id/{id}")
+        @GetMapping("/capacity/{id}")
         public ResponseEntity<String> getCourseCapacityById(@PathVariable long id) {
             return ResponseEntity.ok(courseService.getCourseCapacityById(id));
         }
