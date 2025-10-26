@@ -33,5 +33,5 @@ public class Mentor {
 
     @OneToMany(mappedBy = "mentor",cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Course> courseList=new ArrayList<>();
+    private List<Course> courseList;
 }

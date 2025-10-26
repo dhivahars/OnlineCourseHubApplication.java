@@ -3,6 +3,7 @@ package com.onlinecoursehub.impl.controller;
 import com.onlinecoursehub.impl.dto.StudentDto;
 import com.onlinecoursehub.impl.model.Student;
 import com.onlinecoursehub.impl.service.StudentService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class StudentController {
     StudentService studentService;
 
     @PostMapping("/add")
-    public ResponseEntity<StudentDto> addStudent(@RequestBody Student student) {
+    public ResponseEntity<StudentDto> addStudent(@Valid @RequestBody Student student) {
         return ResponseEntity.ok(studentService.addStudent(student));
     }
 
