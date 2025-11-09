@@ -4,13 +4,14 @@ import com.onlinecoursehub.impl.model.User;
 import com.onlinecoursehub.impl.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin("http://localhost:4200/")
 public class AuthController {
     @Autowired
     private AuthService authService;
@@ -22,8 +23,12 @@ public class AuthController {
 
     // Login endpoint returns JWT
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody User user) {
+    public ResponseEntity<Map<String, String>> loginUser(@RequestBody User user) {
         String token = authService.loginUser(user);
-        return ResponseEntity.ok(token);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("token", token);
+
+        return ResponseEntity.ok(response);
     }
 }

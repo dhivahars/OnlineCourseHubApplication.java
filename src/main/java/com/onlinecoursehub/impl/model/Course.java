@@ -38,6 +38,8 @@ public class Course {
     @ToString.Exclude
     private Mentor mentor;
 
+
+
     @OneToMany(mappedBy = "course",cascade = CascadeType.ALL)
     @JsonIgnoreProperties("student")
     @ToString.Exclude
@@ -55,4 +57,7 @@ public class Course {
 
     @Column(name="skill")
     private String skill;
+
+    @JoinColumn(name = "thumbnail")
+    private String url;
 }

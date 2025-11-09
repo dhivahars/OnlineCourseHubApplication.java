@@ -20,4 +20,5 @@ public class CourseDto {
     private int capacity;
     private Mentor mentorName;
     private Set<String> prerequisites=new HashSet<>();
+    private String url;
 }

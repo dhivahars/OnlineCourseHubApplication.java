@@ -38,8 +38,6 @@ public class User {
     @Column(name = "role",nullable = false)
     private String role;
 
-    @Column(name = "skills",nullable
-
-            = true)
+    @Column(name = "skills",nullable = true)
     private Set<String> skills=new HashSet<>();
 }

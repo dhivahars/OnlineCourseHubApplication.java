@@ -69,6 +69,13 @@ public class StudentService {
         return "Badges earned by " + student.getName() + ":\n" +
                 badge;
     }
+    public Student searchStudent( @Email String email){
+        if(!studentRepository.existsByEmail(email))
+            throw new RuntimeException("Email doesn't exists");
+
+        return studentRepository.findByEmail(email);
+
+    }
 
     public StudentDto searchStudent(Long id, String name, @Email String email) {
         if (id != null) {

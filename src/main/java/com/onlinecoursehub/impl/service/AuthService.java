@@ -7,11 +7,8 @@ import com.onlinecoursehub.impl.repository.MentorRepository;
 import com.onlinecoursehub.impl.repository.StudentRepository;
 import com.onlinecoursehub.impl.repository.UserRepository;
 import com.onlinecoursehub.impl.utils.JwtUtils;
-import org.apache.coyote.Response;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -70,13 +67,9 @@ public class AuthService {
     public String loginUser(User user) {
         User dbUser = userRepository.findByEmail(user.getEmail())
                 .orElseThrow(() -> new RuntimeException("User does not exist"));
-
-        // Check password
         if (!passwordEncoder.matches(user.getPassword(), dbUser.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
-
-        // Generate JWT token
         return jwtUtils.generateToken(dbUser.getEmail());
     }
 }
