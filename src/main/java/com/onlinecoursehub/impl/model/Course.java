@@ -2,6 +2,7 @@ package com.onlinecoursehub.impl.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class Course {
     @Column(name = "course_id")
     private long id;
 
+    @NotBlank
     @Column(name = "title",nullable = false)
     private String title;
 
@@ -35,6 +37,8 @@ public class Course {
     @JoinColumn(name = "mentor_id", nullable = false)
     @ToString.Exclude
     private Mentor mentor;
+
+
 
     @OneToMany(mappedBy = "course",cascade = CascadeType.ALL)
     @JsonIgnoreProperties("student")
@@ -53,4 +57,7 @@ public class Course {
 
     @Column(name="skill")
     private String skill;
+
+    @JoinColumn(name = "thumbnail")
+    private String url;
 }

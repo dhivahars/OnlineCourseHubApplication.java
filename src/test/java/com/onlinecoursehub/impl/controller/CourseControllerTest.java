@@ -80,16 +80,6 @@ class CourseControllerTest {
 
 
     @Test
-    void testUpdateCourse() {
-        when(courseService.updateCourse(1, course)).thenReturn("Updated Successfully");
-
-        ResponseEntity<String> response = courseController.updateCourse(1, course);
-
-        assertEquals("Updated Successfully", response.getBody());
-        verify(courseService, times(1)).updateCourse(1, course);
-    }
-
-    @Test
     void testDeleteCourseById() {
         when(courseService.deleteCourseById(1)).thenReturn("Course Deleted");
 

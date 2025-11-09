@@ -22,7 +22,6 @@ public class StudentService {
         if (studentRepository.existsByEmail(s.getEmail())) {
             throw new RuntimeException("Mail already exists");
         }
-
         studentRepository.save(s);
         return entityToDto(s);
     }
@@ -63,11 +62,19 @@ public class StudentService {
     public String studentBadges(long id) {
         if (!studentRepository.existsById(id))
             throw new RuntimeException("Student not found..............");
-        List<String> badge = studentRepository.getById(id).getBadges().stream().map(Badge::getName).toList();
+        Student student=studentRepository.getById(id);
+        List<String> badge = student.getBadges().stream().map(Badge::getName).toList();
         if (badge.isEmpty())
             throw new RuntimeException("Student doesn't earned any badges..........");
-        return "Badges earned by " + studentRepository.getById(id).getName() + ":\n" +
+        return "Badges earned by " + student.getName() + ":\n" +
                 badge;
+    }
+    public Student searchStudent( @Email String email){
+        if(!studentRepository.existsByEmail(email))
+            throw new RuntimeException("Email doesn't exists");
+
+        return studentRepository.findByEmail(email);
+
     }
 
     public StudentDto searchStudent(Long id, String name, @Email String email) {

@@ -2,17 +2,12 @@ package com.onlinecoursehub.impl.controller;
 
 import com.onlinecoursehub.impl.dto.EnrollmentDto;
 import com.onlinecoursehub.impl.service.EnrollmentService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyDouble;
@@ -71,7 +66,7 @@ class EnrollmentControllerTest {
 
         when(enrollmentService.getEnrollmentById(1L)).thenReturn(dto);
 
-        EnrollmentDto result = enrollmentController.getEnrollmemtById(1L);
+        EnrollmentDto result = enrollmentController.getEnrollmentById(1L);
 
         assertEquals("Jane", result.getStudentName());
         assertEquals("Spring Boot", result.getCourseTitle());

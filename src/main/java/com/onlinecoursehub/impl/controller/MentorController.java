@@ -4,6 +4,7 @@ import com.onlinecoursehub.impl.dto.MentorDto;
 import com.onlinecoursehub.impl.model.Course;
 import com.onlinecoursehub.impl.model.Mentor;
 import com.onlinecoursehub.impl.service.MentorService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +18,16 @@ public class MentorController {
     @Autowired
     MentorService mentorService;
     @PostMapping("/create")
-    public ResponseEntity<String> createMentor(@RequestBody Mentor mentor){
+    public ResponseEntity<MentorDto> createMentor(@Valid @RequestBody Mentor mentor){
         return new ResponseEntity<>(mentorService.addMentor(mentor), HttpStatus.CREATED);
     }
     @GetMapping("/list")
-    public ResponseEntity<List<MentorDto>> ShowMentorList(){
-        return new ResponseEntity<>(mentorService.listMentor(),HttpStatus.CREATED);
+    public ResponseEntity<List<MentorDto>> showMentorList(){
+        return new ResponseEntity<>(mentorService.listMentor(),HttpStatus.OK);
     }
     @GetMapping("/search/{id}")
     public  ResponseEntity<Mentor> listById(@PathVariable long id){
-        return new ResponseEntity<>(mentorService.showById(id).get(),HttpStatus.CREATED);
+        return new ResponseEntity<>(mentorService.showById(id).orElseThrow(()->new RuntimeException("Not found....")),HttpStatus.OK);
     }
     @PatchMapping("/update/{id}")
     public ResponseEntity<String> updateMentor(@PathVariable long id,@RequestBody Mentor m){

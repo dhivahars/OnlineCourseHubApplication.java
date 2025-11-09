@@ -2,6 +2,7 @@ package com.onlinecoursehub.impl.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.onlinecoursehub.impl.utils.Badge;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -38,7 +39,6 @@ public class Student{
 
     @Column(name="student_password",nullable = false)
     @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!*()]).{8,}$")
-
     private String password;
 
     @Column(name="student_registrationDate",nullable =false,updatable = false)
@@ -58,5 +58,5 @@ public class Student{
     private List<Badge> badges = new ArrayList<>();
 
     @Column(name="skills")
-    private Set<String> Skills=new HashSet<>();
+    private Set<String> skills=new HashSet<>();
 }

@@ -18,8 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-@RequestMapping("/report")
-public class Reports {
+@RequestMapping("/reports")
+public class ReportsController {
     @Autowired
     CompletionRecordService completionRecordService;
     @Autowired
@@ -32,15 +32,15 @@ public class Reports {
         return (HashMap<String, List<CompletionRecordDto>>) completionRecordService.getCompletedCourseHistory();
     }
     @GetMapping("/student/course/{id}")
-    public String getStudentPerCourse(@PathVariable long id){
-        return courseService.studentPerCourse(id);
+    public ResponseEntity<String> getStudentPerCourse(@PathVariable long id){
+        return ResponseEntity.ok(courseService.studentPerCourse(id));
     }
     @GetMapping("/student/progress/{id}")
-    public String getStudentProgress(@PathVariable long id){
-        return courseService.studentProgress(id);
+    public ResponseEntity<String> getStudentProgress(@PathVariable long id){
+        return ResponseEntity.ok(courseService.studentProgress(id));
     }
     @GetMapping("/student/badge/{id}")
-    public String getStudentBadges(@PathVariable long id){
-        return studentService.studentBadges(id);
+    public ResponseEntity<String> getStudentBadges(@PathVariable long id){
+        return ResponseEntity.ok(studentService.studentBadges(id));
     }
 }

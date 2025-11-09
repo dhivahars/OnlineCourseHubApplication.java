@@ -31,7 +31,9 @@ public class Mentor {
     @Email
     private String email;
 
+    @Column(name="password",nullable = false)
+    private String password;
     @OneToMany(mappedBy = "mentor",cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Course> courseList=new ArrayList<>();
+    private List<Course> courseList;
 }
