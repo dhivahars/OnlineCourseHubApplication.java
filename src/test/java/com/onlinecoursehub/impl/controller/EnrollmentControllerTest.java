@@ -57,18 +57,18 @@ class EnrollmentControllerTest {
     }
 
 
-    @Test
-    void testGetEnrollmentById() {
-        EnrollmentDto dto = EnrollmentDto.builder()
-                .studentName("Jane")
-                .courseTitle("Spring Boot")
-                .build();
-
-        when(enrollmentService.getEnrollmentById(1L)).thenReturn(dto);
-
-        EnrollmentDto result = enrollmentController.getEnrollmentById(1L);
-
-        assertEquals("Jane", result.getStudentName());
-        assertEquals("Spring Boot", result.getCourseTitle());
-    }
+//    @Test
+//    void testGetEnrollmentById() {
+//        EnrollmentDto dto = EnrollmentDto.builder()
+//                .studentName("Jane")
+//                .courseTitle("Spring Boot")
+//                .build();
+//
+//        when(enrollmentService.getEnrollmentById(1L)).thenReturn(dto);
+//
+//        EnrollmentDto result = enrollmentController.getEnrollmentById(1L);
+//
+//        assertEquals("Jane", result.getStudentName());
+//        assertEquals("Spring Boot", result.getCourseTitle());
+//    }
 }

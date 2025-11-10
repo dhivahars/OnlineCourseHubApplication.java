@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.onlinecoursehub.impl.model.Status;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Service
 public class EnrollmentService {
@@ -140,7 +142,7 @@ public class EnrollmentService {
     }
 
 
-    public EnrollmentDto getEnrollmentById(long id) {
-        return entityToDto(enrollmentRepository.getById(id));
+    public List<EnrollmentDto> getEnrollmentById(long id) {
+        return  enrollmentRepository.findByStudentId(id).stream().map(this::entityToDto).toList();
     }
 }

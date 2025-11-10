@@ -16,6 +16,7 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment,Long> {
     boolean existsById(long enrollmentId);
 
     List<Enrollment> findByStatus(Status status);
+    List<Enrollment> findByStudentId(Long studentId);
 
     @Query("SELECT COUNT(e) > 0 FROM Enrollment e WHERE e.id = :enrollmentId AND e.course.id = :courseId")
     boolean existsByEnrolmentIdAndCourseId(@Param("enrollmentId") Long enrollmentId, @Param("courseId") Long courseId);
