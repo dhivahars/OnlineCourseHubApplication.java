@@ -34,6 +34,7 @@ public class CourseService {
         if(mentorRepository.findById(course.getMentor().getId()).get().getCourseList().size()>=5)
             throw new RuntimeException("Mentor is not available,choose another mentor to create course");
        return entityToDto(courseRepository.save(course));
+
     }
 
 
@@ -105,6 +106,7 @@ public class CourseService {
         courseDto.setTitle(course.getTitle());
         courseDto.setDescription(course.getDescription());
         courseDto.setCapacity(course.getCapacity());
+        courseDto.setUrl(course.getUrl());
         courseDto.setMentorName(mentorRepository.findById(course.getMentor().getId()).get());
         courseDto.setPrerequisites(course.getPrerequisites());
         return courseDto;

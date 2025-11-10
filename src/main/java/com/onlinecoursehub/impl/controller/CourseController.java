@@ -24,11 +24,11 @@ public class CourseController {
         }
         @GetMapping("/list")
         public ResponseEntity<List<CourseDto>> showCourse(){
-            return new ResponseEntity<>(courseService.listCourse(),HttpStatus.FOUND);
+            return new ResponseEntity<>(courseService.listCourse(),HttpStatus.OK);
         }
         @GetMapping("/search/{id}")
         public ResponseEntity<CourseDto> ShowById(@PathVariable long id){
-            return new ResponseEntity<>(courseService.showById(id).orElseThrow(()->new RuntimeException("Not Found......")),HttpStatus.FOUND);
+            return new ResponseEntity<>(courseService.showById(id).orElseThrow(()->new RuntimeException("Not Found......")),HttpStatus.OK);
         }
         @PatchMapping("/update/{id}")
         public ResponseEntity<CourseDto> updateCourse(@PathVariable long id,@RequestBody Course c){

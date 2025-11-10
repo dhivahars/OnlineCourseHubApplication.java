@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/enrollment")
 public class EnrollmentController {
@@ -27,7 +29,7 @@ public class EnrollmentController {
         return enrollmentService.unenrollByEnrollmentId(enrollmentId, courseId);
     }
     @GetMapping("/search/{id}")
-    public EnrollmentDto getEnrollmentById(@PathVariable long id){
+    public List<EnrollmentDto> getEnrollmentById(@PathVariable long id){
         return enrollmentService.getEnrollmentById(id);
     }
 }
