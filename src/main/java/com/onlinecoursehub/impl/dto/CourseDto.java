@@ -21,4 +21,5 @@ public class CourseDto {
     private Mentor mentorName;
     private Set<String> prerequisites=new HashSet<>();
     private String url;
+    private int enrolledCount;
 }
