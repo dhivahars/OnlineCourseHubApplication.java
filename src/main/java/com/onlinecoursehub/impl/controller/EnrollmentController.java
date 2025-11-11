@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/enrollment")
+@RequestMapping("/enroll")
 public class EnrollmentController {
     @Autowired
     private EnrollmentService enrollmentService;
 
-    @PostMapping("/enroll")
-    public ResponseEntity<String> addStudent(@RequestParam Long studentId, @RequestParam Long courseId) {
-        return ResponseEntity.ok(enrollmentService.enrollForCourse(studentId, courseId));
+    @PostMapping("/student/{email}/course/{courseId}")
+    public ResponseEntity<String> addStudent(@PathVariable String email, @PathVariable Long courseId) {
+        return ResponseEntity.ok(enrollmentService.enrollForCourse(email, courseId));
     }
     @PatchMapping("/update/progress")
     public Object updateProgressByEnrollmentId(@RequestParam long enrollmentId,
@@ -28,8 +28,8 @@ public class EnrollmentController {
                                          @PathVariable("courseId") long courseId){
         return enrollmentService.unenrollByEnrollmentId(enrollmentId, courseId);
     }
-    @GetMapping("/search/{id}")
-    public List<EnrollmentDto> getEnrollmentById(@PathVariable long id){
-        return enrollmentService.getEnrollmentById(id);
+    @GetMapping("/search/{email}")
+    public List<EnrollmentDto> getEnrollmentById(@PathVariable String email){
+        return enrollmentService.getEnrollmentById(email);
     }
 }
