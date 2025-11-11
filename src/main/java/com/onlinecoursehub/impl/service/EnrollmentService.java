@@ -28,11 +28,13 @@ public class EnrollmentService {
     private CompletionRecordRepository completionRecordRepository;
 
     @Transactional
-    public String enrollForCourse(Long studentId, Long courseId) {
-        if (!studentRepository.existsById(studentId))
+    public String enrollForCourse(String email, Long courseId) {
+        if (!studentRepository.existsByEmail(email))
             throw new RuntimeException("Student doesn't exists in the database");
         if (!courseRepository.existsById(courseId))
             throw new RuntimeException("course doesn't available in our platform");
+        Long studentId=studentRepository.findByEmail(email).getId();
+
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
@@ -142,7 +144,7 @@ public class EnrollmentService {
     }
 
 
-    public List<EnrollmentDto> getEnrollmentById(long id) {
-        return  enrollmentRepository.findByStudentId(id).stream().map(this::entityToDto).toList();
+    public List<EnrollmentDto> getEnrollmentById(String email) {
+        return  enrollmentRepository.findByStudentEmail(email).stream().map(this::entityToDto).toList();
     }
 }
