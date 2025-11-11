@@ -2,6 +2,7 @@ package com.onlinecoursehub.impl.service;
 
 import com.onlinecoursehub.impl.dto.CourseDto;
 import com.onlinecoursehub.impl.dto.EnrollmentDto;
+import com.onlinecoursehub.impl.dto.MentorStudentDto;
 import com.onlinecoursehub.impl.model.Course;
 import com.onlinecoursehub.impl.model.Mentor;
 import com.onlinecoursehub.impl.model.Enrollment;
@@ -99,6 +100,30 @@ public class CourseService {
         course.setMentor(mentor);
         return courseRepository.save(course);
     }
+//
+public List<MentorStudentDto> getStudentsUnderMentor(Long mentorId) {
+
+  // ✅ Get all courses taught by this mentor
+  List<Course> courses = courseRepository.findByMentorId(mentorId);
+
+  // ✅ Collect all enrollments and map them into DTOs
+  List<MentorStudentDto> studentList = new ArrayList<>();
+
+  for (Course course : courses) {
+    for (Enrollment enrollment : course.getEnrollments()) {
+      Student student = enrollment.getStudent();
+      MentorStudentDto dto = MentorStudentDto.builder()
+        .studentName(student.getName())
+        .courseName(course.getTitle())
+        .progressPercentage(enrollment.getProgressPercentage())
+        .build();
+      studentList.add(dto);
+    }
+  }
+
+  return studentList;
+}
+//
 
      public CourseDto entityToDto(Course course){
         CourseDto courseDto=new CourseDto();
@@ -109,9 +134,28 @@ public class CourseService {
         courseDto.setUrl(course.getUrl());
         courseDto.setMentorName(mentorRepository.findById(course.getMentor().getId()).get());
         courseDto.setPrerequisites(course.getPrerequisites());
+        int enrolledCount = (course.getEnrollments() != null) ? course.getEnrollments().size() : 0;
+        courseDto.setEnrolledCount(enrolledCount);
         return courseDto;
     }
-    public  String studentPerCourse(long id) {
+  public List<CourseDto> getCoursesByMentor(Long mentorId) {
+    if (!mentorRepository.existsById(mentorId)) {
+      throw new RuntimeException("Mentor not found with ID: " + mentorId);
+    }
+
+    List<Course> courses = courseRepository.findByMentorId(mentorId);
+
+    if (courses.isEmpty()) {
+      throw new RuntimeException("No courses found for this mentor");
+    }
+
+    // Convert to DTO list
+    return courses.stream()
+      .map(this::entityToDto)
+      .collect(Collectors.toList());
+  }
+
+  public  String studentPerCourse(long id) {
         if(!courseRepository.existsById(id))
             throw new RuntimeException("No course With Id"+id+"Exists");
         if(courseRepository.findById(id).get().getEnrollments().isEmpty()||courseRepository.findById(id).get().getEnrollments()==null)

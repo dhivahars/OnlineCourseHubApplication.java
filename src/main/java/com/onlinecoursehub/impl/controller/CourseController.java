@@ -1,6 +1,7 @@
 package com.onlinecoursehub.impl.controller;
 
 import com.onlinecoursehub.impl.dto.CourseDto;
+import com.onlinecoursehub.impl.dto.MentorStudentDto;
 import com.onlinecoursehub.impl.model.Course;
 import com.onlinecoursehub.impl.model.Student;
 import com.onlinecoursehub.impl.service.CourseService;
@@ -46,4 +47,17 @@ public class CourseController {
         public ResponseEntity<Course> assignMentor(@PathVariable("courseId") Long courseId, @PathVariable("mentorId") Long mentorId) {
             return ResponseEntity.ok(courseService.modifyMentorToCourse(courseId, mentorId));
         }
+       @GetMapping("/mentor/{mentorId}")
+       public ResponseEntity<List<CourseDto>> getCoursesByMentor(@PathVariable Long mentorId) {
+         List<CourseDto> courses = courseService.getCoursesByMentor(mentorId);
+         return ResponseEntity.ok(courses);
+       }
+
+       @GetMapping("/mentor/{mentorId}/students")
+         public ResponseEntity<List<MentorStudentDto>> getStudentsUnderMentor(@PathVariable Long mentorId) {
+           return ResponseEntity.ok(courseService.getStudentsUnderMentor(mentorId));
+         }
+
+
+
 }
