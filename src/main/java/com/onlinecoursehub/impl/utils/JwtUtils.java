@@ -17,7 +17,7 @@ import java.util.Date;
 @Builder
 public class JwtUtils {
     private final String SECRET = "A real mathematician can mathematically mathematize mathematics in a mathematical mathematiculation";
-    private final long EXPIRATION = 1000 * 60 * 60; // 1 hour
+    private final long EXPIRATION = 1000 * 60 * 60 ; // 1 hour
     private final Key secretKey = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
 
     public String extractEmail(String token) {

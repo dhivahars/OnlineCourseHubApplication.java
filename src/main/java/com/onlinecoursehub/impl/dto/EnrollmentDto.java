@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class EnrollmentDto {
     private long id;
+    private long courseId;
     private String studentName;
     private String courseTitle;
     private Status status;
