@@ -59,6 +59,10 @@ public class CourseService {
             existing.setTitle(c.getTitle());
         if(c.getDescription() != null)
             existing.setDescription(c.getDescription());
+        if(c.getCapacity() != 0)
+            existing.setCapacity(c.getCapacity());
+        if(c.getSkill()!=null)
+            existing.setSkill(c.getSkill());
 
 
         return entityToDto(courseRepository.save(existing));
@@ -132,30 +136,34 @@ public List<MentorStudentDto> getStudentsUnderMentor(Long mentorId) {
         courseDto.setDescription(course.getDescription());
         courseDto.setCapacity(course.getCapacity());
         courseDto.setUrl(course.getUrl());
+        courseDto.setSkill(course.getSkill());
         courseDto.setMentorName(mentorRepository.findById(course.getMentor().getId()).get());
         courseDto.setPrerequisites(course.getPrerequisites());
         int enrolledCount = (course.getEnrollments() != null) ? course.getEnrollments().size() : 0;
         courseDto.setEnrolledCount(enrolledCount);
         return courseDto;
     }
-  public List<CourseDto> getCoursesByMentor(Long mentorId) {
-    if (!mentorRepository.existsById(mentorId)) {
-      throw new RuntimeException("Mentor not found with ID: " + mentorId);
+    public List<CourseDto> getCoursesByMentor(String mentorEmail) {
+        if (!mentorRepository.existsByEmail(mentorEmail)) {
+            throw new RuntimeException("Mentor not found with ID: " + mentorEmail);
+        }
+
+        List<Course> courses = courseRepository.findByMentorEmail(mentorEmail);
+
+        if (courses.isEmpty()) {
+            throw new RuntimeException("No courses found for this mentor");
+        }
+
+        // Convert to DTO list
+        return courses.stream()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
     }
 
-    List<Course> courses = courseRepository.findByMentorId(mentorId);
 
-    if (courses.isEmpty()) {
-      throw new RuntimeException("No courses found for this mentor");
-    }
 
-    // Convert to DTO list
-    return courses.stream()
-      .map(this::entityToDto)
-      .collect(Collectors.toList());
-  }
 
-  public  String studentPerCourse(long id) {
+    public  String studentPerCourse(long id) {
         if(!courseRepository.existsById(id))
             throw new RuntimeException("No course With Id"+id+"Exists");
         if(courseRepository.findById(id).get().getEnrollments().isEmpty()||courseRepository.findById(id).get().getEnrollments()==null)

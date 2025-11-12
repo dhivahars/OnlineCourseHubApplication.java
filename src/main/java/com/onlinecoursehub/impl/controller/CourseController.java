@@ -47,11 +47,11 @@ public class CourseController {
         public ResponseEntity<Course> assignMentor(@PathVariable("courseId") Long courseId, @PathVariable("mentorId") Long mentorId) {
             return ResponseEntity.ok(courseService.modifyMentorToCourse(courseId, mentorId));
         }
-       @GetMapping("/mentor/{mentorId}")
-       public ResponseEntity<List<CourseDto>> getCoursesByMentor(@PathVariable Long mentorId) {
-         List<CourseDto> courses = courseService.getCoursesByMentor(mentorId);
-         return ResponseEntity.ok(courses);
-       }
+    @GetMapping("/mentor/{mentorEmail}")
+    public ResponseEntity<List<CourseDto>> getCoursesByMentor(@PathVariable String mentorEmail) {
+        List<CourseDto> courses = courseService.getCoursesByMentor(mentorEmail);
+        return ResponseEntity.ok(courses);
+    }
 
        @GetMapping("/mentor/{mentorId}/students")
          public ResponseEntity<List<MentorStudentDto>> getStudentsUnderMentor(@PathVariable Long mentorId) {

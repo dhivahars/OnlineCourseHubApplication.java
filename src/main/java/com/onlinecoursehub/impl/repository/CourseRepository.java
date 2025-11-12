@@ -17,4 +17,6 @@ public interface  CourseRepository extends JpaRepository<Course,Long> {
     boolean existsByTitle(String title);
     //For fetching  course by mentor
     List<Course> findByMentorId(Long mentorId);
+
+    List<Course> findByMentorEmail(String mentorEmail);
 }

@@ -2373,3 +2373,16 @@ UPDATE "PUBLIC"."ENROLLMENT" SET "ENROLLMENT_DATE"=? ,"PROGRESS_PERCENTAGE"=? ,"
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:493)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
 	at java.base/java.lang.Thread.run(Thread.java:842)
+2025-11-11 11:20:15.810377+05:30 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "delete ENROLLMENT \000d\000adelete [*]course"; SQL statement:
+delete ENROLLMENT 
+delete course [42000-232]
+2025-11-11 11:22:06.824393+05:30 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "select * [*]mentor"; SQL statement:
+select * mentor [42000-232]
+2025-11-11 11:24:48.850511+05:30 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table mentor [*]modify column mentor_id restrat with 1"; expected "., ADD, SET, RENAME, DROP, ALTER"; SQL statement:
+alter table mentor modify column mentor_id restrat with 1 [42001-232]
+2025-11-11 11:31:26.120643+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM COMPLETION_RECORD COURSE [*]COURSE_PREREQUISITE"; SQL statement:
+SELECT * FROM COMPLETION_RECORD COURSE COURSE_PREREQUISITE [42000-232]

@@ -5,10 +5,13 @@ import com.onlinecoursehub.impl.model.*;
 import com.onlinecoursehub.impl.repository.*;
 import com.onlinecoursehub.impl.utils.Badge;
 import com.onlinecoursehub.impl.utils.CompletionRecord;
+import com.onlinecoursehub.impl.utils.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.onlinecoursehub.impl.model.Status;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.ErrorResponse;
 
 import java.util.List;
 
@@ -26,13 +29,17 @@ public class EnrollmentService {
     private EnrollmentRepository enrollmentRepository;
     @Autowired
     private CompletionRecordRepository completionRecordRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ErrorMessage errorMessage;
 
     @Transactional
-    public String enrollForCourse(String email, Long courseId) {
+    public ErrorMessage enrollForCourse(String email, Long courseId) {
         if (!studentRepository.existsByEmail(email))
-            throw new RuntimeException("Student doesn't exists in the database");
+            return errorMessage.builder().success(false).message("Student doesn't exists in the database").build();
         if (!courseRepository.existsById(courseId))
-            throw new RuntimeException("course doesn't available in our platform");
+            return errorMessage.builder().success(false).message("course doesn't available in our platform").build();
         Long studentId=studentRepository.findByEmail(email).getId();
 
 
@@ -41,13 +48,11 @@ public class EnrollmentService {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
         if (student.getEnrollments().stream().anyMatch(enrollment -> enrollment.getCourse().getId() == course.getId())) {
-            throw new RuntimeException("Student already registered for the course");
+            return errorMessage.builder().success(false).message("Student already registered for the course").build();
         }
-        if (student.getEnrollments().size() > 5)
-            throw new RuntimeException("Student enrolment limit exceeded............");
         if (!course.getPrerequisites().isEmpty()) {
             if (student.getSkills().isEmpty() || !student.getSkills().containsAll(course.getPrerequisites())) {
-                throw new RuntimeException("Prerequisite doesn't met......." + "\n to enroll this course you have to complete:" + course.getPrerequisites());
+                return errorMessage.builder().success(false).message("Prerequisite doesn't met.......").build();
             }
         }
         if ((course.getCapacity() - course.getEnrollments().size()) > 0) {
@@ -63,14 +68,14 @@ public class EnrollmentService {
             courseRepository.save(course);
             badgeRepository.save(badge);
         }
-        return "Course registration successfull........";
+        return errorMessage.builder().success(true).message("Course registration successfull........").build();
     }
 
-    public Object updateProgressByEnrollmentId(long enrollmentId, double progressPercentage) {
+    public ErrorMessage updateProgressByEnrollmentId(long enrollmentId, double progressPercentage) {
         if (enrollmentRepository.existsById(enrollmentId)) {
             Enrollment enrollment = enrollmentRepository.findById(enrollmentId).get();
             if (enrollment.getStatus() == Status.COMPLETED) {
-                throw new RuntimeException("Cannot update completed enrollment");
+                return errorMessage.builder().success(false).message("Cannot update completed enrollment").build();
             }
             if (progressPercentage < enrollment.getProgressPercentage())
                 throw new RuntimeException("Error...............");
@@ -81,48 +86,51 @@ public class EnrollmentService {
             if (progressPercentage == 100) {
                 enrollment.setStatus(Status.COMPLETED);
                 student.getSkills().add(course.getSkill());
+                userRepository.findByEmail(enrollment.getStudent().getEmail()).get().getSkills().add(course.getSkill());
+
                 CompletionRecord completionRecord = CompletionRecord.builder().studentEmail(student.getEmail()).studentName(student.getName()).courseName(course.getTitle()).build();
                 completionRecordRepository.save(completionRecord);
                 Badge badge = Badge.builder().name(course.getTitle() + ":Master").student(student).build();
                 if (badgeRepository.existsByName(badge.getName())) {
                     studentRepository.save(student);
                     courseRepository.save(course);
-                    return "Student Progress Updated\n" + entityToDto(enrollmentRepository.save(enrollment));
+                    return errorMessage.builder().success(true).message("Student Progress Updated\n" + entityToDto(enrollmentRepository.save(enrollment))).build() ;
                 }
 
                 student.getBadges().add(badge);
                 studentRepository.save(student);
                 courseRepository.save(course);
 
-                return "Student Progress Updated\n" + entityToDto(enrollmentRepository.save(enrollment), badge);
+                return errorMessage.builder().success(true).message("Student Progress Updated\n" + entityToDto(enrollmentRepository.save(enrollment), badge)).build();
             } else if (progressPercentage <= 50) {
                 studentRepository.save(student);
                 courseRepository.save(course);
                 enrollmentRepository.save(enrollment);
-                return "Student Progress Updated\n" + entityToDto(enrollment);
+                return errorMessage.builder().success(true).message("Student Progress Updated\n" + entityToDto(enrollment)).build();
             } else if (progressPercentage >= 50) {
                 enrollment.setStatus(Status.HALF_WAY);
                 Badge badge = Badge.builder().name(course.getTitle() + ":Intermmediate").student(student).build();
                 if (badgeRepository.existsByName(badge.getName())) {
                     studentRepository.save(student);
                     courseRepository.save(course);
-                    return "Student Progress Updated\n" + entityToDto(enrollment);
+                    return errorMessage.builder().success(true).message("Student Progress Updated\n" + entityToDto(enrollment)).build();
                 }
                 student.getBadges().add(badge);
                 studentRepository.save(student);
                 courseRepository.save(course);
                 enrollmentRepository.save(enrollment);
-                return "Student Progress Updated\n" + entityToDto(enrollment, badge);
+                return errorMessage.builder().success(true).message("Student Progress Updated\n" + entityToDto(enrollment, badge)).build();
             }
         }
-        throw new RuntimeException("No such enrollment record found");
+        return errorMessage.builder().success(false).message("No such enrollment record found").build();
     }
 
 
     public EnrollmentDto entityToDto(Enrollment enrollment) {
         return new EnrollmentDto().builder()
                 .courseTitle(enrollment.getCourse().getTitle())
-                .id(enrollment.getCourse().getId())
+                .id(enrollment.getId())
+                .courseId(enrollment.getCourse().getId())
                 .studentName(enrollment.getStudent().getName())
                 .status(enrollment.getStatus())
                 .progressPercentage(enrollment.getProgressPercentage())
@@ -130,17 +138,17 @@ public class EnrollmentService {
     }
 
     public EnrollmentDto entityToDto(Enrollment enrollment, Badge badge) {
-        return new EnrollmentDto(enrollment.getId(), enrollment.getStudent().getName(), enrollment.getCourse().getTitle(), enrollment.getStatus(), enrollment.getProgressPercentage());
+        return new EnrollmentDto(enrollment.getId(),enrollment.getCourse().getId(), enrollment.getStudent().getName(), enrollment.getCourse().getTitle(), enrollment.getStatus(), enrollment.getProgressPercentage());
     }
 
-    public Object unenrollByEnrollmentId(long enrollmentId, long courseId) {
+    public ErrorMessage unenrollByEnrollmentId(long enrollmentId, long courseId) {
         if (!enrollmentRepository.existsByEnrolmentIdAndCourseId(enrollmentId, courseId))
-            throw new RuntimeException("Enrollments not found");
+            return errorMessage.builder().success(false).success(false).message("Enrollments not found").build();
 
         Enrollment enrollment = enrollmentRepository.findById(enrollmentId).get();
         enrollmentRepository.delete(enrollment);
 
-        return enrollment.getCourse().getTitle() + "Enrollement deleted successfully";
+        return errorMessage.builder().success(true).message(enrollment.getCourse().getTitle() + "Enrollement deleted successfully").build();
     }
 
 
