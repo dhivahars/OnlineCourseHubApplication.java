@@ -14,4 +14,5 @@ public class MentorDto{
     private long id;
     private String name;
     private String email;
+    private String about;
 }

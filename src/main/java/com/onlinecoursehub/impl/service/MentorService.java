@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -57,7 +59,7 @@ public class MentorService {
         throw new RuntimeException("Mentor Not Found");
     }
     public MentorDto entityToDto(Mentor m){
-        return MentorDto.builder().name(m.getName()).email(m.getEmail()).id(m.getId())
+        return MentorDto.builder().name(m.getName()).email(m.getEmail()).id(m.getId()).about(m.getAbout())
         .build();
     }
     public Course createCourseWithMentor(Course course, String email) {
@@ -67,4 +69,17 @@ public class MentorService {
         course.setMentor(mentor);
         return courseRepository.save(course);
     }
+
+  public Optional<Mentor> showByEmail(String email) {
+    return Optional.ofNullable((Mentor) mentorRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Mentor not found With email:" + email)));
+  }
+
+
+  public String getAbout(String email) {
+      Mentor mentor= mentorRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Mentor not found with email:" + email));
+      if(mentor.getAbout()!=null)
+        return mentor.getAbout();
+        throw new RuntimeException("Mentor Not Found");
+
+  }
 }

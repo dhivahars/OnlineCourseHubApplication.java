@@ -32,10 +32,25 @@ public class AuthService {
     private JwtUtils jwtUtils;
 
     // Register user
-    public User addUser(User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("User already exists");
-        }
+    public ApiResponse<Object> registerUser(User user) {
+      if (userRepository.existsByEmail(user.getEmail())) {
+        return ApiResponse.builder()
+          .success(false)
+          .message("Failed")
+          .error(ApiError.builder()
+            .code("USER_EXISTS")
+            .message("User already exists with this email")
+            .build())
+          .build();
+      }
+      User savedUser = addUser(user);
+      return ApiResponse.builder()
+        .success(true)
+        .message("Registration Successful")
+        .data(savedUser)
+        .build();
+    }
+    private User addUser(User user) {
 
         // Encode password
         user.setPassword(passwordEncoder.encode(user.getPassword()));

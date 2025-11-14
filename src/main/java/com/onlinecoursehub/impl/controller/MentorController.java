@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -42,4 +44,17 @@ public class MentorController {
     public ResponseEntity<Course> createCourse(@Valid @RequestBody Course course,@RequestParam String email){
         return new ResponseEntity<>(mentorService.createCourseWithMentor(course,email),HttpStatus.OK);
     }
+    //
+//    @GetMapping("/{email}")
+//      public ResponseEntity<Mentor> getMentorByEmail(@PathVariable String email){
+//        return new ResponseEntity<>(mentorService.showByEmail(email).orElseThrow(()->new RuntimeException("Not found....")),HttpStatus.OK);
+//    }
+    //
+  @GetMapping("/about/{email}")
+  public ResponseEntity<Map<String,String>> aboutMentors(@PathVariable String email){
+      Map<String,String> map = new HashMap<>();
+      map.put("about",mentorService.getAbout(email));
+      return new ResponseEntity<>(map,HttpStatus.OK);
+  }
+
 }
