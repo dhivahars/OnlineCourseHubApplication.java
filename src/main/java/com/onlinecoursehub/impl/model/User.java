@@ -40,4 +40,6 @@ public class User {
 
     @Column(name = "skills",nullable = true)
     private Set<String> skills=new HashSet<>();
+
+    private String about;
 }

@@ -9,7 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface MentorRepository extends JpaRepository<Mentor,Long> {
-    Optional<Mentor> findByName(String name);
     Optional<Mentor> findById (Long id);
 
     boolean existsByEmail(@Email String email);

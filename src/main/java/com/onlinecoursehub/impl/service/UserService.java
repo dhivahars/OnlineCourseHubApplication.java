@@ -1,5 +1,6 @@
 package com.onlinecoursehub.impl.service;
 
+import com.onlinecoursehub.impl.dto.UserDto;
 import com.onlinecoursehub.impl.model.User;
 import com.onlinecoursehub.impl.repository.UserRepository;
 import com.onlinecoursehub.impl.utils.JwtUtils;
@@ -16,11 +17,15 @@ public class UserService {
     JwtUtils jwtUtils;
 
 
-    public ResponseEntity<User> getCurrentUser(Authentication authentication) {
+    public ResponseEntity<UserDto> getCurrentUser(Authentication authentication) {
         String email = authentication.getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(UserDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .role(user.getRole()).build());
     }
 }

@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -45,5 +47,12 @@ public class StudentController {
     @GetMapping("/{email}")
     public ResponseEntity<Student> currentStudent( @PathVariable String email){
         return  ResponseEntity.ok(studentService.searchStudent(email));
+    }
+    @GetMapping("/skills/{email}")
+    public ResponseEntity<Map<String,Set>> getSkills(@PathVariable String email){
+        Set skill=studentService.getSkillsByMail(email);
+        Map res=new HashMap<>();
+        res.put("Skills",skill);
+        return new ResponseEntity<>(res,HttpStatus.OK);
     }
 }
