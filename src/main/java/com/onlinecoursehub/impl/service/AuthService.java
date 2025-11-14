@@ -6,6 +6,8 @@ import com.onlinecoursehub.impl.model.User;
 import com.onlinecoursehub.impl.repository.MentorRepository;
 import com.onlinecoursehub.impl.repository.StudentRepository;
 import com.onlinecoursehub.impl.repository.UserRepository;
+import com.onlinecoursehub.impl.utils.ApiError;
+import com.onlinecoursehub.impl.utils.ApiResponse;
 import com.onlinecoursehub.impl.utils.JwtUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,12 +66,29 @@ public class AuthService {
     }
 
     // Login user and generate JWT
-    public String loginUser(User user) {
+    public ApiResponse<Object> loginUser(User user) {
         User dbUser = userRepository.findByEmail(user.getEmail())
-                .orElseThrow(() -> new RuntimeException("User does not exist"));
-        if (!passwordEncoder.matches(user.getPassword(), dbUser.getPassword())) {
-            throw new RuntimeException("Invalid password");
+                .orElse(null);
+        if(dbUser==null){
+            return ApiResponse.builder()
+                    .success(false)
+                    .message("Failed")
+                    .error(ApiError.builder()
+                            .code("AUTH_FAILED")
+                            .message("No account found with this email")
+                            .build())
+                    .build();
         }
-        return jwtUtils.generateToken(dbUser.getEmail());
+        if (!passwordEncoder.matches(user.getPassword(), dbUser.getPassword())) {
+            return ApiResponse.builder()
+                    .success(false)
+                    .message("Failed...")
+                    .error(ApiError.builder()
+                            .code("AUTH_FAILED")
+                            .message("Invalid login credentials")
+                            .build())
+                    .build();
+        }
+        return ApiResponse.builder().success(true).message("Login Successfull").data(jwtUtils.generateToken(dbUser.getEmail())).build();
     }
 }

@@ -2,7 +2,10 @@ package com.onlinecoursehub.impl.controller;
 
 import com.onlinecoursehub.impl.model.User;
 import com.onlinecoursehub.impl.service.AuthService;
+import com.onlinecoursehub.impl.utils.ApiError;
+import com.onlinecoursehub.impl.utils.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,11 +26,11 @@ public class AuthController {
 
     // Login endpoint returns JWT
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> loginUser(@RequestBody User user) {
-        String token = authService.loginUser(user);
+    public ResponseEntity<?> loginUser(@RequestBody User user) {
+      ApiResponse response=(ApiResponse) authService.loginUser(user);
+      if(!response.isSuccess())
+          return new ResponseEntity<>(response.getError(),HttpStatus.BAD_REQUEST);
 
-        Map<String, String> response = new HashMap<>();
-        response.put("token", token);
-        return ResponseEntity.ok(response);
+      return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }
