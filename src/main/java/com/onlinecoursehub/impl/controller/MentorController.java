@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/mentor")
@@ -36,5 +37,9 @@ public class MentorController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteMentorById(@PathVariable long id){
         return ResponseEntity.ok(mentorService.deleteMentorById(id));
+    }
+    @PostMapping("/create/course")
+    public ResponseEntity<Course> createCourse(@Valid @RequestBody Course course,@RequestParam String email){
+        return new ResponseEntity<>(mentorService.createCourseWithMentor(course,email),HttpStatus.OK);
     }
 }

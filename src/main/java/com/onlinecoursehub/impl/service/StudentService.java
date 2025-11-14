@@ -5,13 +5,16 @@ import com.onlinecoursehub.impl.model.Enrollment;
 import com.onlinecoursehub.impl.model.Student;
 import com.onlinecoursehub.impl.repository.StudentRepository;
 import com.onlinecoursehub.impl.utils.Badge;
+import com.onlinecoursehub.impl.utils.ErrorMessage;
 import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class StudentService {
@@ -94,5 +97,10 @@ public class StudentService {
             return entityToDto(student);
         }
         throw new RuntimeException("No input given........");
+    }
+
+    public Set getSkillsByMail(String email) {
+        Set skills=studentRepository.findByEmail(email).getSkills();
+        return skills;
     }
 }

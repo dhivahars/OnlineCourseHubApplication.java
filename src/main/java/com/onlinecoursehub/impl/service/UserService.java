@@ -20,6 +20,7 @@ public class UserService {
         String email = authentication.getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
         return ResponseEntity.ok(user);
     }
 }

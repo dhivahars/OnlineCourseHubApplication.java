@@ -153,6 +153,6 @@ public class EnrollmentService {
 
 
     public List<EnrollmentDto> getEnrollmentById(String email) {
-        return  enrollmentRepository.findByStudentEmail(email).stream().map(this::entityToDto).toList();
+        return enrollmentRepository.findByStudentEmail(email).stream().map(this::entityToDto).toList();
     }
 }

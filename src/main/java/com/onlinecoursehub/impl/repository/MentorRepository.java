@@ -13,4 +13,6 @@ public interface MentorRepository extends JpaRepository<Mentor,Long> {
     Optional<Mentor> findById (Long id);
 
     boolean existsByEmail(@Email String email);
+
+    Optional<Mentor> findByEmail(String email);
 }
