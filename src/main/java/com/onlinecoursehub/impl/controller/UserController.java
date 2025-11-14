@@ -1,5 +1,6 @@
 package com.onlinecoursehub.impl.controller;
 
+import com.onlinecoursehub.impl.dto.UserDto;
 import com.onlinecoursehub.impl.model.User;
 import com.onlinecoursehub.impl.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ public class UserController {
     @Autowired
     UserService userService;
     @GetMapping("/me")
-    public ResponseEntity<User> getCurrentUser(Authentication authentication) {
+    public ResponseEntity<UserDto> getCurrentUser(Authentication authentication) {
         return userService.getCurrentUser(authentication);
     }
 }

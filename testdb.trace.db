@@ -2386,3 +2386,12 @@ alter table mentor modify column mentor_id restrat with 1 [42001-232]
 2025-11-11 11:31:26.120643+05:30 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM COMPLETION_RECORD COURSE [*]COURSE_PREREQUISITE"; SQL statement:
 SELECT * FROM COMPLETION_RECORD COURSE COURSE_PREREQUISITE [42000-232]
+2025-11-14 15:24:00.805400+05:30 jdbc[32]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]MENTOR"; expected "MERGE"; SQL statement:
+MENTOR [42001-232]
+2025-11-14 15:24:43.046290+05:30 jdbc[32]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "select * [*]fromCOURSE_PREREQUISITE"; SQL statement:
+select * fromCOURSE_PREREQUISITE [42000-232]
+2025-11-14 15:25:11.769213+05:30 jdbc[32]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "drop [*]course_prerequisite"; expected "TABLE, INDEX, USER, SEQUENCE, CONSTANT, TRIGGER, MATERIALIZED, VIEW, ROLE, ALIAS, SCHEMA, ALL OBJECTS, DOMAIN, TYPE, AGGREGATE, SYNONYM"; SQL statement:
+drop course_prerequisite [42001-232]
