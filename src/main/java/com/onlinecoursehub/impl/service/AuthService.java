@@ -32,27 +32,49 @@ public class AuthService {
     private JwtUtils jwtUtils;
 
     // Register user
+//    public User addUser(User user) {
+//        if (userRepository.existsByEmail(user.getEmail())) {
+//            throw new RuntimeException("User already exists");
+//        }
+//
+//        // Encode password
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//
+//        switch (user.getRole().toLowerCase()) {
+//            case "student": {
+//                Student student = Student.builder()
+//                        .name(user.getName())
+//                        .email(user.getEmail())
+//                        .password(user.getPassword())
+//                        .skills(user.getSkills())
+//                        .build();
+//                studentRepository.save(student);
+//                return userRepository.save(user);
+//            }
+//            case "mentor": {
+//                Mentor mentor = Mentor.builder()
+//                        .name(user.getName())
+//                        .email(user.getEmail())
+//                        .password(user.getPassword())
+//                        .build();
+//                mentorRepository.save(mentor);
+//                return userRepository.save(user);
+//            }
+//            default:
+//                throw new RuntimeException("User registration unsuccessful");
+//        }
+//    }
     public ApiResponse<Object> registerUser(User user) {
-      if (userRepository.existsByEmail(user.getEmail())) {
-        return ApiResponse.builder()
-          .success(false)
-          .message("Failed")
-          .error(ApiError.builder()
-            .code("USER_EXISTS")
-            .message("User already exists with this email")
-            .build())
-          .build();
-      }
-      User savedUser = addUser(user);
-      return ApiResponse.builder()
-        .success(true)
-        .message("Registration Successful")
-        .data(savedUser)
-        .build();
-    }
-    private User addUser(User user) {
-
-        // Encode password
+        if (userRepository.existsByEmail(user.getEmail())) {
+            return ApiResponse.builder()
+                    .success(false)
+                    .message("Failed")
+                    .error(ApiError.builder()
+                            .code("USER_EXISTS")
+                            .message("User already exists with this email")
+                            .build())
+                    .build();
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         switch (user.getRole().toLowerCase()) {
@@ -64,22 +86,38 @@ public class AuthService {
                         .skills(user.getSkills())
                         .build();
                 studentRepository.save(student);
-                return userRepository.save(user);
+                return ApiResponse.builder()
+                        .success(true)
+                        .message("Student Registration Successfully")
+                        .data(userRepository.save(user))
+                        .build();
             }
             case "mentor": {
                 Mentor mentor = Mentor.builder()
                         .name(user.getName())
                         .email(user.getEmail())
+                        .about(user.getAbout())
                         .password(user.getPassword())
                         .build();
                 mentorRepository.save(mentor);
-                return userRepository.save(user);
+                return ApiResponse.builder()
+                        .success(true)
+                        .data(userRepository.save(user))
+                        .message("Mentor Registration Successfull")
+                        .build();
             }
             default:
-                throw new RuntimeException("User registration unsuccessful");
-        }
-    }
+                return ApiResponse.builder()
+                        .success(false)
+                        .message("failed")
+                        .error(ApiError.builder()
+                                .code("AUTH_FAILED")
+                                .message("User registration unsuccessful").build())
+                        .build();
 
+        }
+
+    }
     // Login user and generate JWT
     public ApiResponse<Object> loginUser(User user) {
         User dbUser = userRepository.findByEmail(user.getEmail())

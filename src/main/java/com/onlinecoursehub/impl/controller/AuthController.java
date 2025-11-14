@@ -21,11 +21,11 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
-      ApiResponse response=(ApiResponse) authService.registerUser(user);
-      if(!response.isSuccess())
-        return new ResponseEntity<>(response.getError(),HttpStatus.BAD_REQUEST);
+        ApiResponse response=(ApiResponse) authService.registerUser(user);
+        if(!response.isSuccess())
+            return new ResponseEntity<>(response.getError(),HttpStatus.BAD_REQUEST);
 
-      return new ResponseEntity<>(response,HttpStatus.OK);    }
+        return new ResponseEntity<>(response,HttpStatus.OK);    }
 
     // Login endpoint returns JWT
     @PostMapping("/login")

@@ -69,17 +69,12 @@ public class MentorService {
         course.setMentor(mentor);
         return courseRepository.save(course);
     }
+    public String getAbout(String email) {
+        Mentor mentor= mentorRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Mentor not found with email:" + email));
+        if(mentor.getAbout()==null){
+            throw new RuntimeException("Mentor Not Found");}
 
-  public Optional<Mentor> showByEmail(String email) {
-    return Optional.ofNullable((Mentor) mentorRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Mentor not found With email:" + email)));
-  }
-
-
-  public String getAbout(String email) {
-      Mentor mentor= mentorRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Mentor not found with email:" + email));
-      if(mentor.getAbout()!=null)
         return mentor.getAbout();
-        throw new RuntimeException("Mentor Not Found");
 
-  }
+    }
 }
