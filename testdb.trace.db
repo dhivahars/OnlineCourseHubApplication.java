@@ -2395,3 +2395,15 @@ select * fromCOURSE_PREREQUISITE [42000-232]
 2025-11-14 15:25:11.769213+05:30 jdbc[32]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "drop [*]course_prerequisite"; expected "TABLE, INDEX, USER, SEQUENCE, CONSTANT, TRIGGER, MATERIALIZED, VIEW, ROLE, ALIAS, SCHEMA, ALL OBJECTS, DOMAIN, TYPE, AGGREGATE, SYNONYM"; SQL statement:
 drop course_prerequisite [42001-232]
+2025-11-14 20:22:42.787677+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "ABOUT CHARACTER VARYING(255)": "U&'A mentor is someone who actually knows what they\\2019re doing and can prove i... (670)"; SQL statement:
+insert into mentor (about,mentor_mail,mentor_name,password,mentor_id) values (?,?,?,?,default) [22001-232]
+2025-11-14 20:22:50.951200+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "ABOUT CHARACTER VARYING(255)": "U&'A mentor is someone who actually knows what they\\2019re doing and can prove i... (670)"; SQL statement:
+insert into mentor (about,mentor_mail,mentor_name,password,mentor_id) values (?,?,?,?,default) [22001-232]
+2025-11-14 20:23:07.563833+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "ABOUT CHARACTER VARYING(255)": "U&'A mentor is someone who actually knows what they\\2019re doing and can prove i... (343)"; SQL statement:
+insert into mentor (about,mentor_mail,mentor_name,password,mentor_id) values (?,?,?,?,default) [22001-232]
+2025-11-14 20:26:22.770682+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "ABOUT CHARACTER VARYING(255)": "U&'A mentor is someone who actually knows what they\\2019re doing and can prove i... (670)"; SQL statement:
+insert into user_table (about,email,username,password,role,skills,id) values (?,?,?,?,?,?,default) [22001-232]
