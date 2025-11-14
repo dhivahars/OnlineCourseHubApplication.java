@@ -10,7 +10,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -36,4 +38,7 @@ public class Mentor {
     @OneToMany(mappedBy = "mentor",cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Course> courseList;
+
+    @Column(name = "about")
+    private String about;
 }

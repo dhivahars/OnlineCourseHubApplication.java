@@ -1,5 +1,6 @@
 package com.onlinecoursehub.impl.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -36,6 +37,7 @@ public class Course {
     @ManyToOne
     @JoinColumn(name = "mentor_id", nullable = false)
     @ToString.Exclude
+    @JsonIgnore
     private Mentor mentor;
 
 

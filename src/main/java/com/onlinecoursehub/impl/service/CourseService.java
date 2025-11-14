@@ -150,10 +150,6 @@ public List<MentorStudentDto> getStudentsUnderMentor(Long mentorId) {
 
         List<Course> courses = courseRepository.findByMentorEmail(mentorEmail);
 
-        if (courses.isEmpty()) {
-            throw new RuntimeException("No courses found for this mentor");
-        }
-
         // Convert to DTO list
         return courses.stream()
                 .map(this::entityToDto)
