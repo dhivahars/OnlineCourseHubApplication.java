@@ -2407,3 +2407,9 @@ insert into mentor (about,mentor_mail,mentor_name,password,mentor_id) values (?,
 2025-11-14 20:26:22.770682+05:30 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLDataException: Value too long for column "ABOUT CHARACTER VARYING(255)": "U&'A mentor is someone who actually knows what they\\2019re doing and can prove i... (670)"; SQL statement:
 insert into user_table (about,email,username,password,role,skills,id) values (?,?,?,?,?,?,default) [22001-232]
+2025-11-14 20:27:29.789331+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "ABOUT CHARACTER VARYING(255)": "SPACE(670 /* table: -3 id: 3 */) (670)"; SQL statement:
+INSERT INTO "PUBLIC"."MENTOR_COPY_3_0"("MENTOR_ID", "MENTOR_MAIL", "MENTOR_NAME", "PASSWORD", "ABOUT", "ROLE") OVERRIDING SYSTEM VALUE SELECT "MENTOR_ID", "MENTOR_MAIL", "MENTOR_NAME", "PASSWORD", "ABOUT", "ROLE" FROM "PUBLIC"."MENTOR" [22001-232]
+2025-11-14 20:28:26.510693+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "ABOUT CHARACTER VARYING(255)": "U&'A mentor is someone who actually knows what they\\2019re doing and can prove i... (670)"; SQL statement:
+insert into user_table (about,email,username,password,role,skills,id) values (?,?,?,?,?,?,default) [22001-232]
