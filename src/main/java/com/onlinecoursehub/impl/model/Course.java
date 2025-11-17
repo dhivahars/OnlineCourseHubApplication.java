@@ -30,7 +30,7 @@ public class Course {
     @Column(name ="description",nullable = false)
     private String description;
 
-    @Column(name="capacity",nullable = false)
+    @Column(name="capacity")
     private int capacity;
 
 
@@ -42,7 +42,7 @@ public class Course {
 
 
 
-    @OneToMany(mappedBy = "course",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "course",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JsonIgnoreProperties("student")
     @ToString.Exclude
     private List<Enrollment> enrollments=new ArrayList<>();

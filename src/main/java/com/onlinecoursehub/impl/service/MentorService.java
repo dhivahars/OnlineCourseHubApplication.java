@@ -75,4 +75,9 @@ public class MentorService {
         return mentor.getAbout();
 
     }
+
+    public MentorDto getMentorByEmail(String email) {
+        Mentor mentor=mentorRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Mentor not found"));
+        return this.entityToDto(mentor);
+    }
 }

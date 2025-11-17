@@ -55,7 +55,7 @@ public class EnrollmentService {
                 return errorMessage.builder().success(false).message("Prerequisite doesn't met.......").build();
             }
         }
-        if ((course.getCapacity() - course.getEnrollments().size()) > 0) {
+        if (true) {
             Enrollment e = new Enrollment();
             Badge badge = Badge.builder().name(course.getTitle() + ":Beginner").student(student).build();
             e.setStatus(Status.IN_PROGRESS);
