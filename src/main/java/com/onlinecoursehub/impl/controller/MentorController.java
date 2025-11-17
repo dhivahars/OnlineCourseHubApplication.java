@@ -50,4 +50,8 @@ public class MentorController {
         map.put("about",mentorService.getAbout(email));
         return new ResponseEntity<>(map,HttpStatus.OK);
     }
+    @GetMapping("/{email}/details")
+    public ResponseEntity<MentorDto> mentorDetails(@PathVariable String email){
+        return ResponseEntity.ok(mentorService.getMentorByEmail(email));
+    }
 }
