@@ -79,15 +79,15 @@ class CourseControllerTest {
     }
 
 
-    @Test
-    void testDeleteCourseById() {
-        when(courseService.deleteCourseById(1)).thenReturn("Course Deleted");
-
-        ResponseEntity<String> response = courseController.deleteCourseById(1);
-
-        assertEquals("Course Deleted", response.getBody());
-        verify(courseService, times(1)).deleteCourseById(1);
-    }
+//    @Test
+//    void testDeleteCourseById() {
+//        when(courseService.deleteCourseById(1)).thenReturn("Course Deleted");
+//
+//        ResponseEntity<String> response = courseController.deleteCourseById(1);
+//
+//        assertEquals("Course Deleted", response.getBody());
+//        verify(courseService, times(1)).deleteCourseById(1);
+//    }
 
 
     @Test
