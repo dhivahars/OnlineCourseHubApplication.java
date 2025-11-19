@@ -10,6 +10,8 @@ import com.onlinecoursehub.impl.model.Student;
 import com.onlinecoursehub.impl.repository.CourseRepository;
 import com.onlinecoursehub.impl.repository.MentorRepository;
 import com.onlinecoursehub.impl.repository.StudentRepository;
+import com.onlinecoursehub.impl.utils.ApiError;
+import com.onlinecoursehub.impl.utils.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -69,12 +71,20 @@ public class CourseService {
     }
 
 
-    public String deleteCourseById(long id) {
+    public ApiResponse<Object> deleteCourseById(long id) {
         if(courseRepository.existsById(id)){
             courseRepository.deleteById(id);
-            return "Course Deleted Successfully";}
+            return ApiResponse .builder()
+                    .success(true)
+                    .message("Deletion successful").build();
 
-        throw new RuntimeException( "Course Not Found");
+
+        }
+        return ApiResponse.builder()
+                .success(false)
+                .error(ApiError.builder().code("CRUD_FAILED").message("Deletion Failed").build())
+                .build();
+
     }
 
 

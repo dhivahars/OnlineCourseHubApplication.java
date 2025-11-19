@@ -5,6 +5,7 @@ import com.onlinecoursehub.impl.dto.MentorStudentDto;
 import com.onlinecoursehub.impl.model.Course;
 import com.onlinecoursehub.impl.model.Student;
 import com.onlinecoursehub.impl.service.CourseService;
+import com.onlinecoursehub.impl.utils.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,10 +36,14 @@ public class CourseController {
         public ResponseEntity<CourseDto> updateCourse(@PathVariable long id,@RequestBody Course c){
             return ResponseEntity.ok(courseService.updateCourse(id,c));
         }
-        @DeleteMapping("/delete/{id}")
-        public ResponseEntity<String> deleteCourseById(@PathVariable long id){
-            return ResponseEntity.ok(courseService.deleteCourseById(id));
-        }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteCourseById(@PathVariable long id)
+    {
+        ApiResponse response=(ApiResponse) courseService.deleteCourseById(id);
+        if(!response.isSuccess())
+            return new ResponseEntity<>(response.getError(),HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
         @GetMapping("/capacity/{id}")
         public ResponseEntity<String> getCourseCapacityById(@PathVariable long id) {
             return ResponseEntity.ok(courseService.getCourseCapacityById(id));
